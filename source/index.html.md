@@ -515,3 +515,4 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `message`        | String    | - | Mensagem de retorno.
 `data`           | String    | - | Identificações dos lançamentos salvos para processamento. 
 
+
