@@ -514,5 +514,3 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `success`        | Boolean   | - | Retorno de verdadeiro ou falso de acordo com a operação.
 `message`        | String    | - | Mensagem de retorno.
 `data`           | String    | - | Identificações dos lançamentos salvos para processamento. 
-
-
