@@ -341,20 +341,65 @@ IRestResponse response = client.Execute(request);
 ```
 
 ```javascript
-var data = "grant_type=client_credentials&scope=apifiliado%20apifiliado%3Abaixa&client_id=&client_secret=";
+var http = require('https');
 
-var xhr = new XMLHttpRequest();
+var fs = require('fs');
 
-xhr.withCredentials = true;
-xhr.addEventListener("readystatechange", function() {
-  if(this.readyState === 4) {
-    console.log(this.responseText);
-  }
+var qs = require('querystring');
+
+var options = {
+  'method': 'POST',
+  'hostname': '{endpoint da api}',
+  'path': '/sso2/connect/token',
+  'headers': {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  'maxRedirects': 20
+};
+
+var req = http.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+  res.on("end", function (chunk) {
+    var body = Buffer.concat(chunks);
+
+    console.log(body.toString());
+  });
+  res.on("error", function (error) {
+    console.error(error);
+  });
 });
-xhr.open("POST", "https://login.cartaodetodos.com.br/connect/token");
-xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-xhr.send(data);
 
+var postData = qs.stringify({
+  'client_id': '{SeuClientID}',
+  'client_secret': '{SeuClientSecret}',
+  'grant_type': 'client_credentials',
+  'scope': 'openid apifiliado ctn apifiliado:baixa'
+});
+
+req.write(postData);
+req.end();
+
+```
+
+```py
+import http.client
+import mimetypes
+conn = http.client.HTTPSConnection("{endpoint da api}")
+payload = 'client_id={client Id}}'\
+            'client_secret={secret}'\
+            '&grant_type=client_credentials'\
+            '&scope=openid apifiliado ctn apifiliado:baixa'
+headers = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+}
+conn.request("POST", "/sso2/connect/token", payload, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
 ```
 
 > A requisição irá retornar o seguinte JSON:
@@ -390,10 +435,10 @@ Para consumir a API é necessário informar o <code>access_token</code> no cabe�
 
 **Serviços**
 
-SERVIÇO | IDENTIFICAÇÃO 
---------- | ----------- 
-`Mensalidade`   | mensalidade     
-`Adesão`        | adesão  
+id | SERVIÇO | IDENTIFICAÇÃO DE ARRECADAÇÃO 
+--------- | --------- | ----------- 
+1   | `Mensalidade`   | mensalidade     
+4   | `Adesão`        | adesão  
 
 <br>
 
@@ -404,6 +449,85 @@ ID | FORMA DE PAGAMENTO
 `5301083`   | PAYVALIDA - BALOTO     
 `5301085`   | PAYVALIDA - EFECTY  
 
+<br>
+
+**idTipoFormaPagamento - Forma de Pagamento**
+
+id | FORMA DE PAGAMENTO 
+--------- | ----------- 
+1  | BOLETO     
+2  | CARNE  
+3  | CARTÃO DE CRÉDITO 
+4  | CONCESSIONÁRIA ENERGIA  
+5  | DÉBITO BANCÁRIO  
+7  | DIRETO NO CARTÃO
+
+<br>
+
+**idFormaPagamento - Forma de Pagamento**
+
+### BOLETOS
+
+id | FORMA DE PAGAMENTO 
+--------- | ----------- 
+5300067	  | BOLETO BRADESCO
+5300069	  | BOLETO SANTANDER
+5300114	  | BOLETO CAIXA
+
+### CARNÊS
+
+id | FORMA DE PAGAMENTO 
+--------- | ----------- 
+23	      | CARNÊ - SANTANDER
+5300077	  | BOLETO SANTANDER - CORPORATIVO
+
+### CONCESSIONÁRIAS DE ENERGIA
+
+id | FORMA DE PAGAMENTO
+--------- | ----------- 
+2	      | ESCELSA
+3	      | SANTA MARIA
+4	      | CPFL PAULISTA
+5	      | CPFL PIRATININGA
+6	      | ENERGISA
+7	      | CPFL SUL
+5300001 |	BANDEIRANTES SP
+5300002	| ENEL DISTRIBUIÇÃO
+5300003	| AMPLA RJ
+5300004	| RGE
+5300007	| COELCE
+5300058	| CPFL SANTA CRUZ
+5300061	| AES SUL
+5300113	| CELG
+5300121	| RGE SUL
+5300137	| NEOENERGIA COELBA
+5301126	| NEOENERGIA CELPE
+5301127	| NEOENERGIA COSERN
+
+### DÉBITOS BANCÁRIOS
+
+id | FORMA DE PAGAMENTO 
+--------- | ----------- 
+14	    | BANCO DO BRASIL
+15	    | CAIXA ECONOMICA FEDERAL
+18	    | BRADESCO
+5300083	| SANTANDER
+5300088	| ITAU
+5300115	| SICOOB
+
+### DIRETO NO CARTÃO
+
+id | FORMA DE PAGAMENTO 
+--------- | ----------- 
+22	      | DIRETO NO CARTÃO - DINHEIRO
+5300009	  | DIRETO NO CARTÃO - CIELO/MASTER
+5300010	  | DIRETO NO CARTÃO - MASTER
+5300011	  | DIRETO NO CARTÃO - CHEQUE
+5300013	  | DIRETO NO CARTÃO - DÉBITO
+5300070	  | DIRETO NO CARTÃO - PAG SEGURO
+5300081	  | DIRETO NO CARTÃO - REDE PAY
+5300082	  | DIRETO NO CARTÃO - DEPOSITO BANCÁRIO
+5300104	  | DIRETO NO CARTÃO - PAGTODOS
 
 ## Arrecadação de Lançamentos
 
@@ -514,3 +638,394 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `success`        | Boolean   | - | Retorno de verdadeiro ou falso de acordo com a operação.
 `message`        | String    | - | Mensagem de retorno.
 `data`           | String    | - | Identificações dos lançamentos salvos para processamento. 
+
+
+## Filiação
+
+**Requisição HTTP** 
+
+`POST /filiacao`
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+    "idUsuario": 1,
+    "idPv": "476d4593-ea73-478e-a0e4-7146c58107b4",
+    "idFranquia": 326,
+    "titular": {
+        "nome": "Nome Filiado Alternativo",
+        "dataNascimento": "2001-01-16",
+        "documentoIdentificacao": "66253276549",
+        "email": "MARIAJOSELIVRE10@HOTMAIL.COM",
+        "identidade": "445422445",
+        "estadoCivil": 1,
+        "genero": 1,
+        "telefones": [
+            {
+                "numero": "65998046690",
+                "tipo": 2
+            }
+        ]
+    },
+    "enderecoTitular": {
+        "codigoPostal": "78058178",
+        "logradouro": "Rua Galinha-d'água",
+        "bairro": "Morada da Serra",
+        "cidade": "Cuiabá",
+        "numero": "12",
+        "complemento": "Casa",
+        "uf": "MT"
+    },
+    "responsavelFinanceiroMesmoTitultar": false,
+    "responsavelFinanceiro": {
+        "nome": "Nome Filiado Alternativo",
+        "dataNascimento": "2001-01-16",
+        "documentoIdentificacao": "66253276549",
+        "email": "MARIAJOSELIVRE10@HOTMAIL.COM",
+        "identidade": "445422445",
+        "estadoCivil": 1,
+        "genero": 1,
+        "telefones": [
+            {
+                "numero": "65998046690",
+                "tipo": 2
+            }
+        ]
+    },
+    "enderecoResponsavelFinanceiro": {
+        "codigoPostal": "78058178",
+        "logradouro": "Rua Galinha-d'água",
+        "bairro": "Morada da Serra",
+        "cidade": "Cuiabá",
+        "numero": "12",
+        "complemento": "Casa",
+        "uf": "MT"
+    },
+    "formasPagamento": [
+        {
+            "id": "fp_4234",
+            "idTipoFormaPagamento": energia,
+            "idFormaPagamento": neoEnergia,
+            "dados": {
+                "uc": "asdasd",
+                "pn": "",
+                "contraContrato": ""
+            }
+        },
+        {
+            "id": "cartao",
+            "idTipoFormaPagamento": 3,
+            "idFormaPagamento": null,
+            "dados": {
+                "mes": 12,
+                "ano": 2022,
+                "numero": "4111.1111.1111.1111",
+                "nome": "Gustavo Senci",
+                "bandeira": "visa",
+                "codigoSeguranca": "123",
+                "criptografiaAdyen": null,
+                "metodo": 0,
+                "dadosAutenticacao": {
+                    "cavv": null,
+                    "xid": null,
+                    "eci": null,
+                    "version": null,
+                    "referenceId": null,
+                    "autenticado": false
+                }
+            }
+        }
+    ],
+    "servicos": [
+        {
+            "id": 4,
+            "formaPagamento": "fp_enel"
+        },
+        {
+            "id": 1,
+            "parcelas": 1,
+            "formaPagamento": "diretoCartao"
+        }
+    ],
+    "voucher": "dadasdasd", // opcional
+    "termoAceite": true
+}
+```
+
+### Entrada
+
+As tabelas a seguir são descrições de toda a estrutura Json exibida ao lado.
+
+Os três primeiros dados que teremos no Json são:
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`idUsuario`             | Int    | -  | Identificação do usuário.
+`idPv`                  | String | -  | Identificação do Promotor de Vendas.
+`idFranquia`            | Int    | -  | Identificação da franquia
+
+<br>
+
+A tabela a seguir é descritiva ao objeto <code>titular</code> e também <code>responsavelFinanceiro</code>. 
+
+<aside class="notice">
+O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
+</aside>
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`nome`                    | String  | - | Nome do titular do contrato e/ou responsável financeiro.
+`dataNascimento`          | Int     | - | Data de nascimento do titular do contrato e/ou responsável financeiro.
+`documentoIdentificacao`  | String  | - | CPF do titular do contrato e/ou responsável financeiro.
+`email`                   | String  | - | E-mail do titular do contrato e/ou responsável financeiro.
+`identidade`              | String  | - | RG do titular do contrato e/ou responsável financeiro.
+`estadoCivil`             | Int     | - | Estado civil do titular do contrato e/ ou responsável financeiro.
+`genero`                  | Int     | - | Gênero do titular do contrato e/ ou responsável financeiro.
+`numero`                  | String  | - | Numero do telefone ou celular do titular do contrato e/ ou responsável financeiro.
+`tipo`                    | Int     | - | Tipo do número, se é Celular ou Telefone fixo.
+
+<br>
+
+A tabela a seguir é descritiva ao objeto <code>enderecoTitular</code> e <code>enderecoResponsavelFinanceiro</code>.
+
+<aside class="notice">
+O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
+</aside>
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`codigoPostal`            | String  |    | Código postal do titular do contrato e/ou responsável financeiro.
+`logradouro`              | String  |    | Endereço do titular do contrato e/ou responsável financeiro.
+`bairro`                  | String  |    | Bairro do titular do contrato e/ou responsável financeiro.
+`cidade`                  | String  |    | Cidade do titular do contrato e/ou responsável financeiro.
+`numero`                  | String  |    | Número da casa do titular do contrato e/ou responsável financeiro.
+`complemento`             | String  |    | Complemento do endereço do titular do contrato e/ou responsável financeiro.
+`uf`                      | String  |    | Estado do titular do contrato e/ou responsável financeiro.
+
+<br>
+
+A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. 
+
+<aside class="notice">
+Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code> e <code>enderecoResponsavelFinanceiro</code>, caso retorne **FALSO**, esses objetos são obrigatórios.
+</aside>
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`responsavelFinanceiroMesmoTitultar`  | Boolean  |    | Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.
+
+<br>
+
+A tabela a seguir é descritiva ao objeto de <code id='forma_pgto'>formasPagamento</code>.
+
+<aside class="notice">
+A estrutura do objeto <code>formasPagamento</code> dependerá da forma de pagamento escolhida pelo cliente.
+</aside>
+
+Abaixo veremos a estrutura geral que será requerida em todas as formas de pagamento e logo depois, as particularidades de cada um.
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`id`                      | String  |    | Identificação da forma de pagamento relacionada com os serviços que serão informados. <a href='#relacionamento'>(Exemplo)</a>
+`idTipoFormaPagamento`    | String  |    | Identificação do idTipoFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.
+`idFormaPagamento`        | String  |    | Identificação do idFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.
+`dados`                   | object  |    | As informações contidade nesse objeto dependerá do retorno da forma de pagamento escolhida pelo cliente.
+
+<br>
+
+Abaixo veremos as estruturas de cada forma de pagamento.
+
+<aside class="notice">
+Para cobranças no Direto no Cartão, Boleto ou Carnê é necessário apenas as informações da estrutura geral.
+</aside>
+
+### Concessionária de Energia
+
+> Estrutura JSON dos dados da concessionária de energia
+
+```json
+{
+   "uc":"00000000000",
+   "contaContrato":"000000000000",
+   "pn":"000000"
+}
+```
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`uc`                      | String  |    | Número da UC (Unidade consumidora) da conta do cliente.
+`contaContrato`           | String  |    | No grupo NeoEnergia, ao invés da cobrança ser realizada pela instalação/uc é realizada pela conta contrato. **Campo exclusivo da NeoEnergia.**
+`pn`                      | String  |    | Part number/ Numero de peça. **Exclusivo do grupo CPFL.**
+
+
+
+### Cartão de Crédito
+
+> Estrutura JSON dos dados do cartão de crédito
+
+```json
+   "dados":{
+      "mes":1,
+      "ano":2021,
+      "numero":"2222.2222.2222.2222",
+      "nome":"John Doe",
+      "bandeira":"master",
+      "codigoSeguranca":"361",
+      "criptografiaAdyen":"",
+      "metodo":0,
+      "dadosAutenticacao":{
+         "cavv":null,
+         "xid":null,
+         "eci":null,
+         "version":null,
+         "referenceId":null,
+         "autenticado":false
+      }
+   }
+```
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`mes`                  | Int     |    | Informação do mês da data de válidade do cartão do cliente.
+`ano`                  | Int     |    | Informação do ano da data de válidade do cartão do cliente.
+`numero`               | String  |    | Número do cartão do cliente.
+`nome`                 | String  |    | Nome conforme cartão do cliente.
+`bandeira`             | String  |    | Bandeira do cartão do cliente.
+`codigoSeguranca`      | String  |    | CVC do cartão do cliente.
+`criptografiaAdyen`    | String  |    | 
+`metodo`               | Int     |    | Identificador se o cartão é crédito ou débito. 0 = Cartão crédito / 1 = Cartão de Débito
+`cavv`                 | String  |    | 
+`xid`                  | String  |    |
+`eci`                  | String  |    | 
+`version`              | String  |    | 
+`referenceId`          | String  |    | 
+`autenticado`          | Boolean |    | 
+
+### Débito Bancário
+
+> Estrutura JSON dos dados do débito bancário
+
+```json
+{
+    "agencia": "0000",
+    "digitoVerificadorAgencia": "0",
+    "conta": "000000",
+    "digitoVerificadorConta": "0",
+    "diaVencimento": 1,
+    "codigoOperacao": "000",
+    "nomeCorrentista": "Nome do Correntista"
+}
+```
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`agencia`                  | String  |    | Número da agência do cliente.
+`digitoVerificadorAgencia` | String  |    | Dígito verificador da agência se houver.
+`conta`                    | String  |    | Número da conta.
+`digitoVerificadorConta`   | String  |    | Dígito verificador da conta.
+`diaVencimento`            | String  |    | Dia em que será realizado a tentativa de cobrança.
+`codigoOperacao`           | String  |    | Código de operação da conta.
+`nomeCorrentista`          | String  |    | Nome do titular da conta.
+
+
+<br>
+
+A tabela a seguir é descritiva do objeto <code>servicos</code>.
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`id`              | Int      |    | id será informado de acordo com o serviço escolhido. O mesmo pode ser verificado no <a href='#dicionario-de-dados'>dicionário de dados</a>.
+`formaPagamento`  | String   |    | O <code>id</code> informado no objeto <a href='#forma_pgto'><code>formaPagamento</code></a>.
+`parcelas`        | Int      |    | Esse campo só será informado se o id do serviço for correspondente ao serviço de **Adesão**.
+
+<br>
+
+Por fim teremos os dois ultimos campos do Json
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`Voucher`      | String   |    | Nome do Voucher (caso o cliente possuir) para desconto da mensalidade e/ou adesão.
+`termoAceite`  | Boolean  |    | Identificador da confirmação do cliente.
+
+### Relacionamento - Formas de Pagamento x Serviços 
+
+> JSON  do Exemplo 1
+
+```json
+    "formasPagamento": [
+        {​​​​​
+            "id": "fp_1",
+            "idTipoFormaPagamento": 4,
+            "idFormaPagamento": 456,
+            "dados": {​​​​​
+                "uc": "123456789",
+                "pn": "123456789",
+                "contraContrato": "123456789"
+            }​​​​​
+        }​​​​​
+    ],
+ 
+    "servicos": [
+        {​​​​​
+            "id": 1,
+            "parcelas": 1,
+            "formaPagamento": "fp_1"
+        }​​​​​,
+        {​​​​​
+            "id": 4,
+            "formaPagamento": "fp_1"
+        }​​​​​,
+    ],
+```
+ 
+> JSON  do Exemplo 2
+
+```json
+ "formasPagamento": [
+        {​​​​​
+            "id": "fp_1",
+            "idTipoFormaPagamento": 7,
+            "idFormaPagamento": 22,
+            "dados": {​​​​​ }​​​​​
+        }​​​​​,
+        {​​​​​
+            "id": "fp_2",
+            "idTipoFormaPagamento": "id_debito_bancario",
+            "idFormaPagamento": "id_debito_bancario_x",
+            "dados": {​​​​​
+                "estrutura dos dados do debito bancario aqui"
+            }​​​​​
+        }​​​​​
+    ],
+ 
+    "servicos": [
+        {​​​​​
+            "id": 1,
+            "parcelas": 1,
+            "formaPagamento": "fp_2"
+        }​​​​​,
+        {​​​​​
+            "id": 4,
+            "formaPagamento": "fp_1"
+        }​​​​​,
+    ],
+```
+
+Ao informar os serviços a serem inclusos e as formas de pagamento que serão utilizadas, deve-se informar uma chave em cada objeto em <code id='relacionamento'>formasPagamento</code> para identificar e relacionar com os respectivos serviços que serão cobrados por ela.
+ 
+**Exemplo 1:**
+ 
+Será feita uma filiação com os serviços 1 (Adesão) e 4 (Mensalidade), a filiação será feita feita pela concessionária de energia XXXXX.
+ 
+O payload ficará da seguinte forma:
+ 
+A forma de pagamento foi identificada como `fp_1` e relacionada com os dois serviços (campo `id` do objeto do Serviço),
+Desta forma, será vinculado e executado os dois serviços na forma de pagamento especificada.
+ 
+**Exemplo 2:**
+ 
+No segundo exemplo, será feita uma filiação onde o serviço de Adesão (4) será feito com a forma de pagametno Direto no Cartão, e a mensalidade será feita com o serviço de Débito Bancário, a estrutura ficará da seguinte forma:
+ 
+O serviço de Mensalidade (1) está vinculado à forma de pagamento Débito Bancário através da chave `fp_2`
+ 
+e o serviço de adesão (4) está vinculado à forma de pagamento Direto no Cartão através da chave `fp_1`.
