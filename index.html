@@ -336,6 +336,9 @@
                   <li>
                     <a href="#arrecadacao-de-lancamentos" class="toc-h2 toc-link" data-title="Arrecadação de Lançamentos">Arrecadação de Lançamentos</a>
                   </li>
+                  <li>
+                    <a href="#filiacao" class="toc-h2 toc-link" data-title="Filiação">Filiação</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -938,20 +941,62 @@ Você deve substituir <code>B4C7AB108191735504990B41D18F1EDBEC14891AC5CC59E0CC7A
 
 <span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
 
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">grant_type=client_credentials&amp;scope=apifiliado%20apifiliado%3Abaixa&amp;client_id=&amp;client_secret=</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">https</span><span class="dl">'</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">fs</span><span class="dl">'</span><span class="p">);</span>
 
-<span class="nx">xhr</span><span class="p">.</span><span class="nx">withCredentials</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-<span class="nx">xhr</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">readystatechange</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">===</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseText</span><span class="p">);</span>
-  <span class="p">}</span>
+<span class="kd">var</span> <span class="nx">qs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">querystring</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">hostname</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{endpoint da api}</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/sso2/connect/token</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/x-www-form-urlencoded</span><span class="dl">'</span>
+  <span class="p">},</span>
+  <span class="dl">'</span><span class="s1">maxRedirects</span><span class="dl">'</span><span class="p">:</span> <span class="mi">20</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">end</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
+
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="p">});</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">});</span>
 <span class="p">});</span>
-<span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">https://login.cartaodetodos.com.br/connect/token</span><span class="dl">"</span><span class="p">);</span>
-<span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">application/x-www-form-urlencoded</span><span class="dl">"</span><span class="p">);</span>
-<span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 
+<span class="kd">var</span> <span class="nx">postData</span> <span class="o">=</span> <span class="nx">qs</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+  <span class="dl">'</span><span class="s1">client_id</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{SeuClientID}</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">client_secret</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{SeuClientSecret}</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">grant_type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">client_credentials</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">scope</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">openid apifiliado ctn apifiliado:baixa</span><span class="dl">'</span>
+<span class="p">});</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">postData</span><span class="p">);</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+
+</code></pre></div><div class="highlight"><pre class="highlight py tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+<span class="kn">import</span> <span class="nn">mimetypes</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"{endpoint da api}"</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="s">'client_id={client Id}}'</span>\
+            <span class="s">'client_secret={secret}'</span>\
+            <span class="s">'&amp;grant_type=client_credentials'</span>\
+            <span class="s">'&amp;scope=openid apifiliado ctn apifiliado:baixa'</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/x-www-form-urlencoded'</span>
+<span class="p">}</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="s">"/sso2/connect/token"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
 </code></pre></div>
 <blockquote>
 <p>A requisição irá retornar o seguinte JSON:</p>
@@ -986,15 +1031,18 @@ Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
 
 <table><thead>
 <tr>
+<th>id</th>
 <th>SERVIÇO</th>
-<th>IDENTIFICAÇÃO</th>
+<th>IDENTIFICAÇÃO DE ARRECADAÇÃO</th>
 </tr>
 </thead><tbody>
 <tr>
+<td>1</td>
 <td><code>Mensalidade</code></td>
 <td>mensalidade</td>
 </tr>
 <tr>
+<td>4</td>
 <td><code>Adesão</code></td>
 <td>adesão</td>
 </tr>
@@ -1017,6 +1065,238 @@ Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
 <tr>
 <td><code>5301085</code></td>
 <td>PAYVALIDA - EFECTY</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p><strong>idTipoFormaPagamento - Forma de Pagamento</strong></p>
+
+<table><thead>
+<tr>
+<th>id</th>
+<th>FORMA DE PAGAMENTO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>1</td>
+<td>BOLETO</td>
+</tr>
+<tr>
+<td>2</td>
+<td>CARNE</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CARTÃO DE CRÉDITO</td>
+</tr>
+<tr>
+<td>4</td>
+<td>CONCESSIONÁRIA ENERGIA</td>
+</tr>
+<tr>
+<td>5</td>
+<td>DÉBITO BANCÁRIO</td>
+</tr>
+<tr>
+<td>7</td>
+<td>DIRETO NO CARTÃO</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p><strong>idFormaPagamento - Forma de Pagamento</strong></p>
+<h3 id='boletos'>BOLETOS</h3>
+<table><thead>
+<tr>
+<th>id</th>
+<th>FORMA DE PAGAMENTO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>5300067</td>
+<td>BOLETO BRADESCO</td>
+</tr>
+<tr>
+<td>5300069</td>
+<td>BOLETO SANTANDER</td>
+</tr>
+<tr>
+<td>5300114</td>
+<td>BOLETO CAIXA</td>
+</tr>
+</tbody></table>
+<h3 id='carnes'>CARNÊS</h3>
+<table><thead>
+<tr>
+<th>id</th>
+<th>FORMA DE PAGAMENTO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>23</td>
+<td>CARNÊ - SANTANDER</td>
+</tr>
+<tr>
+<td>5300077</td>
+<td>BOLETO SANTANDER - CORPORATIVO</td>
+</tr>
+</tbody></table>
+<h3 id='concessionarias-de-energia'>CONCESSIONÁRIAS DE ENERGIA</h3>
+<table><thead>
+<tr>
+<th>id</th>
+<th>FORMA DE PAGAMENTO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>2</td>
+<td>ESCELSA</td>
+</tr>
+<tr>
+<td>3</td>
+<td>SANTA MARIA</td>
+</tr>
+<tr>
+<td>4</td>
+<td>CPFL PAULISTA</td>
+</tr>
+<tr>
+<td>5</td>
+<td>CPFL PIRATININGA</td>
+</tr>
+<tr>
+<td>6</td>
+<td>ENERGISA</td>
+</tr>
+<tr>
+<td>7</td>
+<td>CPFL SUL</td>
+</tr>
+<tr>
+<td>5300001</td>
+<td>BANDEIRANTES SP</td>
+</tr>
+<tr>
+<td>5300002</td>
+<td>ENEL DISTRIBUIÇÃO</td>
+</tr>
+<tr>
+<td>5300003</td>
+<td>AMPLA RJ</td>
+</tr>
+<tr>
+<td>5300004</td>
+<td>RGE</td>
+</tr>
+<tr>
+<td>5300007</td>
+<td>COELCE</td>
+</tr>
+<tr>
+<td>5300058</td>
+<td>CPFL SANTA CRUZ</td>
+</tr>
+<tr>
+<td>5300061</td>
+<td>AES SUL</td>
+</tr>
+<tr>
+<td>5300113</td>
+<td>CELG</td>
+</tr>
+<tr>
+<td>5300121</td>
+<td>RGE SUL</td>
+</tr>
+<tr>
+<td>5300137</td>
+<td>NEOENERGIA COELBA</td>
+</tr>
+<tr>
+<td>5301126</td>
+<td>NEOENERGIA CELPE</td>
+</tr>
+<tr>
+<td>5301127</td>
+<td>NEOENERGIA COSERN</td>
+</tr>
+</tbody></table>
+<h3 id='debitos-bancarios'>DÉBITOS BANCÁRIOS</h3>
+<table><thead>
+<tr>
+<th>id</th>
+<th>FORMA DE PAGAMENTO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>14</td>
+<td>BANCO DO BRASIL</td>
+</tr>
+<tr>
+<td>15</td>
+<td>CAIXA ECONOMICA FEDERAL</td>
+</tr>
+<tr>
+<td>18</td>
+<td>BRADESCO</td>
+</tr>
+<tr>
+<td>5300083</td>
+<td>SANTANDER</td>
+</tr>
+<tr>
+<td>5300088</td>
+<td>ITAU</td>
+</tr>
+<tr>
+<td>5300115</td>
+<td>SICOOB</td>
+</tr>
+</tbody></table>
+<h3 id='direto-no-cartao'>DIRETO NO CARTÃO</h3>
+<table><thead>
+<tr>
+<th>id</th>
+<th>FORMA DE PAGAMENTO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>22</td>
+<td>DIRETO NO CARTÃO - DINHEIRO</td>
+</tr>
+<tr>
+<td>5300009</td>
+<td>DIRETO NO CARTÃO - CIELO/MASTER</td>
+</tr>
+<tr>
+<td>5300010</td>
+<td>DIRETO NO CARTÃO - MASTER</td>
+</tr>
+<tr>
+<td>5300011</td>
+<td>DIRETO NO CARTÃO - CHEQUE</td>
+</tr>
+<tr>
+<td>5300013</td>
+<td>DIRETO NO CARTÃO - DÉBITO</td>
+</tr>
+<tr>
+<td>5300070</td>
+<td>DIRETO NO CARTÃO - PAG SEGURO</td>
+</tr>
+<tr>
+<td>5300081</td>
+<td>DIRETO NO CARTÃO - REDE PAY</td>
+</tr>
+<tr>
+<td>5300082</td>
+<td>DIRETO NO CARTÃO - DEPOSITO BANCÁRIO</td>
+</tr>
+<tr>
+<td>5300104</td>
+<td>DIRETO NO CARTÃO - PAGTODOS</td>
 </tr>
 </tbody></table>
 <h2 id='arrecadacao-de-lancamentos'>Arrecadação de Lançamentos</h2><div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://homologacao.sistematodos.com.br/api.filiado/lancamentos/baixa"</span><span class="p">);</span>
@@ -1166,6 +1446,710 @@ Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
 <td>Identificações dos lançamentos salvos para processamento.</td>
 </tr>
 </tbody></table>
+<h2 id='filiacao'>Filiação</h2>
+<p><strong>Requisição HTTP</strong> </p>
+
+<p><code>POST /filiacao</code></p>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="w">    </span><span class="nl">"idUsuario"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"idPv"</span><span class="p">:</span><span class="w"> </span><span class="s2">"476d4593-ea73-478e-a0e4-7146c58107b4"</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"idFranquia"</span><span class="p">:</span><span class="w"> </span><span class="mi">326</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"titular"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nome Filiado Alternativo"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"dataNascimento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2001-01-16"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"documentoIdentificacao"</span><span class="p">:</span><span class="w"> </span><span class="s2">"66253276549"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MARIAJOSELIVRE10@HOTMAIL.COM"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"identidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"445422445"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"estadoCivil"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"genero"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"telefones"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"65998046690"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"tipo"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"enderecoTitular"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"codigoPostal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"78058178"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"logradouro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rua Galinha-d'água"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"bairro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Morada da Serra"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cuiabá"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"complemento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Casa"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"uf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MT"</span><span class="w">
+    </span><span class="p">}</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"responsavelFinanceiroMesmoTitultar"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"responsavelFinanceiro"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nome Filiado Alternativo"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"dataNascimento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2001-01-16"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"documentoIdentificacao"</span><span class="p">:</span><span class="w"> </span><span class="s2">"66253276549"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MARIAJOSELIVRE10@HOTMAIL.COM"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"identidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"445422445"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"estadoCivil"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"genero"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"telefones"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"65998046690"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"tipo"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"enderecoResponsavelFinanceiro"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"codigoPostal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"78058178"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"logradouro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rua Galinha-d'água"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"bairro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Morada da Serra"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cuiabá"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"complemento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Casa"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"uf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MT"</span><span class="w">
+    </span><span class="p">}</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"formasPagamento"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_4234"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idTipoFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="err">energia</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="err">neoEnergia</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"dados"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"uc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasd"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"pn"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"contraContrato"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cartao"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idTipoFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"dados"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"mes"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"ano"</span><span class="p">:</span><span class="w"> </span><span class="mi">2022</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4111.1111.1111.1111"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Gustavo Senci"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"bandeira"</span><span class="p">:</span><span class="w"> </span><span class="s2">"visa"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"codigoSeguranca"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"criptografiaAdyen"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"metodo"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"dadosAutenticacao"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"cavv"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"xid"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"eci"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"referenceId"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"autenticado"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"servicos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_enel"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"parcelas"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"diretoCartao"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="err">,</span><span class="w">
+    </span><span class="nl">"voucher"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dadasdasd"</span><span class="err">,</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="err">opcional</span><span class="w">
+    </span><span class="nl">"termoAceite"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='entrada-2'>Entrada</h3>
+<p>As tabelas a seguir são descrições de toda a estrutura Json exibida ao lado.</p>
+
+<p>Os três primeiros dados que teremos no Json são:</p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>idUsuario</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Identificação do usuário.</td>
+</tr>
+<tr>
+<td><code>idPv</code></td>
+<td>String</td>
+<td>-</td>
+<td>Identificação do Promotor de Vendas.</td>
+</tr>
+<tr>
+<td><code>idFranquia</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Identificação da franquia</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir é descritiva ao objeto <code>titular</code> e também <code>responsavelFinanceiro</code>. </p>
+
+<aside class="notice">
+O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
+</aside>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>nome</code></td>
+<td>String</td>
+<td>-</td>
+<td>Nome do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>dataNascimento</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Data de nascimento do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>documentoIdentificacao</code></td>
+<td>String</td>
+<td>-</td>
+<td>CPF do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>String</td>
+<td>-</td>
+<td>E-mail do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>identidade</code></td>
+<td>String</td>
+<td>-</td>
+<td>RG do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>estadoCivil</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Estado civil do titular do contrato e/ ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>genero</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Gênero do titular do contrato e/ ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>numero</code></td>
+<td>String</td>
+<td>-</td>
+<td>Numero do telefone ou celular do titular do contrato e/ ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>tipo</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Tipo do número, se é Celular ou Telefone fixo.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir é descritiva ao objeto <code>enderecoTitular</code> e <code>enderecoResponsavelFinanceiro</code>.</p>
+
+<aside class="notice">
+O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
+</aside>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>codigoPostal</code></td>
+<td>String</td>
+<td></td>
+<td>Código postal do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>logradouro</code></td>
+<td>String</td>
+<td></td>
+<td>Endereço do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>bairro</code></td>
+<td>String</td>
+<td></td>
+<td>Bairro do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>cidade</code></td>
+<td>String</td>
+<td></td>
+<td>Cidade do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>numero</code></td>
+<td>String</td>
+<td></td>
+<td>Número da casa do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>complemento</code></td>
+<td>String</td>
+<td></td>
+<td>Complemento do endereço do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>uf</code></td>
+<td>String</td>
+<td></td>
+<td>Estado do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. </p>
+
+<aside class="notice">
+Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code> e <code>enderecoResponsavelFinanceiro</code>, caso retorne **FALSO**, esses objetos são obrigatórios.
+</aside>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>responsavelFinanceiroMesmoTitultar</code></td>
+<td>Boolean</td>
+<td></td>
+<td>Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir é descritiva ao objeto de <code id='forma_pgto'>formasPagamento</code>.</p>
+
+<aside class="notice">
+A estrutura do objeto <code>formasPagamento</code> dependerá da forma de pagamento escolhida pelo cliente.
+</aside>
+
+<p>Abaixo veremos a estrutura geral que será requerida em todas as formas de pagamento e logo depois, as particularidades de cada um.</p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>id</code></td>
+<td>String</td>
+<td></td>
+<td>Identificação da forma de pagamento relacionada com os serviços que serão informados. <a href='#relacionamento'>(Exemplo)</a></td>
+</tr>
+<tr>
+<td><code>idTipoFormaPagamento</code></td>
+<td>String</td>
+<td></td>
+<td>Identificação do idTipoFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.</td>
+</tr>
+<tr>
+<td><code>idFormaPagamento</code></td>
+<td>String</td>
+<td></td>
+<td>Identificação do idFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.</td>
+</tr>
+<tr>
+<td><code>dados</code></td>
+<td>object</td>
+<td></td>
+<td>As informações contidade nesse objeto dependerá do retorno da forma de pagamento escolhida pelo cliente.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>Abaixo veremos as estruturas de cada forma de pagamento.</p>
+
+<aside class="notice">
+Para cobranças no Direto no Cartão, Boleto ou Carnê é necessário apenas as informações da estrutura geral.
+</aside>
+<h3 id='concessionaria-de-energia'>Concessionária de Energia</h3>
+<blockquote>
+<p>Estrutura JSON dos dados da concessionária de energia</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+   </span><span class="nl">"uc"</span><span class="p">:</span><span class="s2">"00000000000"</span><span class="p">,</span><span class="w">
+   </span><span class="nl">"contaContrato"</span><span class="p">:</span><span class="s2">"000000000000"</span><span class="p">,</span><span class="w">
+   </span><span class="nl">"pn"</span><span class="p">:</span><span class="s2">"000000"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>uc</code></td>
+<td>String</td>
+<td></td>
+<td>Número da UC (Unidade consumidora) da conta do cliente.</td>
+</tr>
+<tr>
+<td><code>contaContrato</code></td>
+<td>String</td>
+<td></td>
+<td>No grupo NeoEnergia, ao invés da cobrança ser realizada pela instalação/uc é realizada pela conta contrato. <strong>Campo exclusivo da NeoEnergia.</strong></td>
+</tr>
+<tr>
+<td><code>pn</code></td>
+<td>String</td>
+<td></td>
+<td>Part number/ Numero de peça. <strong>Exclusivo do grupo CPFL.</strong></td>
+</tr>
+</tbody></table>
+<h3 id='cartao-de-credito'>Cartão de Crédito</h3>
+<blockquote>
+<p>Estrutura JSON dos dados do cartão de crédito</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="w">   </span><span class="nl">"dados"</span><span class="p">:{</span><span class="w">
+      </span><span class="nl">"mes"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"ano"</span><span class="p">:</span><span class="mi">2021</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"numero"</span><span class="p">:</span><span class="s2">"2222.2222.2222.2222"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"nome"</span><span class="p">:</span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"bandeira"</span><span class="p">:</span><span class="s2">"master"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"codigoSeguranca"</span><span class="p">:</span><span class="s2">"361"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"criptografiaAdyen"</span><span class="p">:</span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"metodo"</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"dadosAutenticacao"</span><span class="p">:{</span><span class="w">
+         </span><span class="nl">"cavv"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"xid"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"eci"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"version"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"referenceId"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+         </span><span class="nl">"autenticado"</span><span class="p">:</span><span class="kc">false</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>mes</code></td>
+<td>Int</td>
+<td></td>
+<td>Informação do mês da data de válidade do cartão do cliente.</td>
+</tr>
+<tr>
+<td><code>ano</code></td>
+<td>Int</td>
+<td></td>
+<td>Informação do ano da data de válidade do cartão do cliente.</td>
+</tr>
+<tr>
+<td><code>numero</code></td>
+<td>String</td>
+<td></td>
+<td>Número do cartão do cliente.</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>String</td>
+<td></td>
+<td>Nome conforme cartão do cliente.</td>
+</tr>
+<tr>
+<td><code>bandeira</code></td>
+<td>String</td>
+<td></td>
+<td>Bandeira do cartão do cliente.</td>
+</tr>
+<tr>
+<td><code>codigoSeguranca</code></td>
+<td>String</td>
+<td></td>
+<td>CVC do cartão do cliente.</td>
+</tr>
+<tr>
+<td><code>criptografiaAdyen</code></td>
+<td>String</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>metodo</code></td>
+<td>Int</td>
+<td></td>
+<td>Identificador se o cartão é crédito ou débito. 0 = Cartão crédito / 1 = Cartão de Débito</td>
+</tr>
+<tr>
+<td><code>cavv</code></td>
+<td>String</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>xid</code></td>
+<td>String</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>eci</code></td>
+<td>String</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>String</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>referenceId</code></td>
+<td>String</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>autenticado</code></td>
+<td>Boolean</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id='debito-bancario'>Débito Bancário</h3>
+<blockquote>
+<p>Estrutura JSON dos dados do débito bancário</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"agencia"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"digitoVerificadorAgencia"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"conta"</span><span class="p">:</span><span class="w"> </span><span class="s2">"000000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"digitoVerificadorConta"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"diaVencimento"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"codigoOperacao"</span><span class="p">:</span><span class="w"> </span><span class="s2">"000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"nomeCorrentista"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nome do Correntista"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>agencia</code></td>
+<td>String</td>
+<td></td>
+<td>Número da agência do cliente.</td>
+</tr>
+<tr>
+<td><code>digitoVerificadorAgencia</code></td>
+<td>String</td>
+<td></td>
+<td>Dígito verificador da agência se houver.</td>
+</tr>
+<tr>
+<td><code>conta</code></td>
+<td>String</td>
+<td></td>
+<td>Número da conta.</td>
+</tr>
+<tr>
+<td><code>digitoVerificadorConta</code></td>
+<td>String</td>
+<td></td>
+<td>Dígito verificador da conta.</td>
+</tr>
+<tr>
+<td><code>diaVencimento</code></td>
+<td>String</td>
+<td></td>
+<td>Dia em que será realizado a tentativa de cobrança.</td>
+</tr>
+<tr>
+<td><code>codigoOperacao</code></td>
+<td>String</td>
+<td></td>
+<td>Código de operação da conta.</td>
+</tr>
+<tr>
+<td><code>nomeCorrentista</code></td>
+<td>String</td>
+<td></td>
+<td>Nome do titular da conta.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir é descritiva do objeto <code>servicos</code>.</p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>id</code></td>
+<td>Int</td>
+<td></td>
+<td>id será informado de acordo com o serviço escolhido. O mesmo pode ser verificado no <a href='#dicionario-de-dados'>dicionário de dados</a>.</td>
+</tr>
+<tr>
+<td><code>formaPagamento</code></td>
+<td>String</td>
+<td></td>
+<td>O <code>id</code> informado no objeto <a href='#forma_pgto'><code>formaPagamento</code></a>.</td>
+</tr>
+<tr>
+<td><code>parcelas</code></td>
+<td>Int</td>
+<td></td>
+<td>Esse campo só será informado se o id do serviço for correspondente ao serviço de <strong>Adesão</strong>.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>Por fim teremos os dois ultimos campos do Json</p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>Voucher</code></td>
+<td>String</td>
+<td></td>
+<td>Nome do Voucher (caso o cliente possuir) para desconto da mensalidade e/ou adesão.</td>
+</tr>
+<tr>
+<td><code>termoAceite</code></td>
+<td>Boolean</td>
+<td></td>
+<td>Identificador da confirmação do cliente.</td>
+</tr>
+</tbody></table>
+<h3 id='relacionamento-formas-de-pagamento-x-servicos'>Relacionamento - Formas de Pagamento x Serviços</h3>
+<blockquote>
+<p>JSON  do Exemplo 1</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="w">    </span><span class="nl">"formasPagamento"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="err">​​​​​</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_1"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idTipoFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">456</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"dados"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">​​​​​</span><span class="w">
+                </span><span class="nl">"uc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"pn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"contraContrato"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="w">
+            </span><span class="p">}</span><span class="err">​​​​​</span><span class="w">
+        </span><span class="p">}</span><span class="err">​​​​​</span><span class="w">
+    </span><span class="p">]</span><span class="err">,</span><span class="w">
+
+    </span><span class="nl">"servicos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="err">​​​​​</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"parcelas"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_1"</span><span class="w">
+        </span><span class="p">}</span><span class="err">​​​​​</span><span class="p">,</span><span class="w">
+        </span><span class="p">{</span><span class="err">​​​​​</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_1"</span><span class="w">
+        </span><span class="p">}</span><span class="err">​​​​​</span><span class="p">,</span><span class="w">
+    </span><span class="p">]</span><span class="err">,</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>JSON  do Exemplo 2</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="w"> </span><span class="nl">"formasPagamento"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="err">​​​​​</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_1"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idTipoFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"dados"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">​​​​​</span><span class="w"> </span><span class="p">}</span><span class="err">​​​​​</span><span class="w">
+        </span><span class="p">}</span><span class="err">​​​​​</span><span class="p">,</span><span class="w">
+        </span><span class="p">{</span><span class="err">​​​​​</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_2"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idTipoFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id_debito_bancario"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"id_debito_bancario_x"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"dados"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="err">​​​​​</span><span class="w">
+                </span><span class="s2">"estrutura dos dados do debito bancario aqui"</span><span class="w">
+            </span><span class="p">}</span><span class="err">​​​​​</span><span class="w">
+        </span><span class="p">}</span><span class="err">​​​​​</span><span class="w">
+    </span><span class="p">]</span><span class="err">,</span><span class="w">
+
+    </span><span class="nl">"servicos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="err">​​​​​</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"parcelas"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_2"</span><span class="w">
+        </span><span class="p">}</span><span class="err">​​​​​</span><span class="p">,</span><span class="w">
+        </span><span class="p">{</span><span class="err">​​​​​</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_1"</span><span class="w">
+        </span><span class="p">}</span><span class="err">​​​​​</span><span class="p">,</span><span class="w">
+    </span><span class="p">]</span><span class="err">,</span><span class="w">
+</span></code></pre></div>
+<p>Ao informar os serviços a serem inclusos e as formas de pagamento que serão utilizadas, deve-se informar uma chave em cada objeto em <code id='relacionamento'>formasPagamento</code> para identificar e relacionar com os respectivos serviços que serão cobrados por ela.</p>
+
+<p><strong>Exemplo 1:</strong></p>
+
+<p>Será feita uma filiação com os serviços 1 (Adesão) e 4 (Mensalidade), a filiação será feita feita pela concessionária de energia XXXXX.</p>
+
+<p>O payload ficará da seguinte forma:</p>
+
+<p>A forma de pagamento foi identificada como <code>fp_1</code> e relacionada com os dois serviços (campo <code>id</code> do objeto do Serviço),
+Desta forma, será vinculado e executado os dois serviços na forma de pagamento especificada.</p>
+
+<p><strong>Exemplo 2:</strong></p>
+
+<p>No segundo exemplo, será feita uma filiação onde o serviço de Adesão (4) será feito com a forma de pagametno Direto no Cartão, e a mensalidade será feita com o serviço de Débito Bancário, a estrutura ficará da seguinte forma:</p>
+
+<p>O serviço de Mensalidade (1) está vinculado à forma de pagamento Débito Bancário através da chave <code>fp_2</code></p>
+
+<p>e o serviço de adesão (4) está vinculado à forma de pagamento Direto no Cartão através da chave <code>fp_1</code>.</p>
 <h1 id='erros'>Erros</h1>
 <p>Nossas API&#39;s utilizam os seguintes códigos de erro:</p>
 <h3 id='erros-2'>Erros</h3>
