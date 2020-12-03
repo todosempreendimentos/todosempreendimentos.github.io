@@ -351,7 +351,16 @@
                     <a href="#autenticacao-3" class="toc-h2 toc-link" data-title="Autenticação">Autenticação</a>
                   </li>
                   <li>
-                    <a href="#filiado" class="toc-h2 toc-link" data-title="Filiado">Filiado</a>
+                    <a href="#franquias-promotor" class="toc-h2 toc-link" data-title="Franquias/promotor">Franquias/promotor</a>
+                  </li>
+                  <li>
+                    <a href="#perfis" class="toc-h2 toc-link" data-title="Perfis">Perfis</a>
+                  </li>
+                  <li>
+                    <a href="#perfis-franquia-idfranquia" class="toc-h2 toc-link" data-title="Perfis/franquia/{idFranquia}">Perfis/franquia/{idFranquia}</a>
+                  </li>
+                  <li>
+                    <a href="#franquias-mais-proxima" class="toc-h2 toc-link" data-title="Franquias/mais-proxima">Franquias/mais-proxima</a>
                   </li>
               </ul>
           </li>
@@ -943,7 +952,7 @@ Você deve substituir <code>B4C7AB108191735504990B41D18F1EDBEC14891AC5CC59E0CC7A
 <blockquote>
 <p>Para autorização, use este código:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://login.cartaodetodos.com.br/connect/token"</span><span class="p">);</span>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://minhaconta.sistematodos.com.br/connect/token"</span><span class="p">);</span>
 
 <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">POST</span><span class="p">);</span>
 
@@ -2184,7 +2193,7 @@ Desta forma, será vinculado e executado os dois serviços na forma de pagamento
 <blockquote>
 <p>Para autorização, use este código:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://login.cartaodetodos.com.br/connect/token"</span><span class="p">);</span>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://minhaconta.sistematodos.com.br/connect/token"</span><span class="p">);</span>
 
 <span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">POST</span><span class="p">);</span>
 
@@ -2275,7 +2284,7 @@ Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
 <aside class="notice">
 Os escopos devem ser solicitados de acordo com as informações que se deseja
 </aside>
-<h2 id='filiado'>Filiado</h2>
+
 <p>Veremos abaixo os métodos para consulta na API Franquias, seus parâmetros e rotas.</p>
 
 <aside class="notice">
@@ -2300,7 +2309,7 @@ Em todas as requisições deve ser informado o <code>Produto</code> para que pos
 <td>Sistema do Clube de Vantagens da Família</td>
 </tr>
 </tbody></table>
-<h3 id='franquias-promotor'>Franquias/promotor</h3>
+<h2 id='franquias-promotor'>Franquias/promotor</h2>
 <p><strong>Requisição HTTP</strong> </p>
 
 <p>Ao acessar a rota <code>GET /v2/Franquias/promotor</code> será listado o id da franquia a qual o promotor pertence.</p>
@@ -2349,7 +2358,7 @@ O promotor será identificado pelo <code>access_token</code> passado na requisi�
 <td>Id da franquia a qual o promotor pertence.</td>
 </tr>
 </tbody></table>
-<h3 id='perfis'>Perfis</h3>
+<h2 id='perfis'>Perfis</h2>
 <p>Ao acessar a rota <code>GET /v2/Perfis</code> será listado o perfil em todas as franquias que está vinculado.</p>
 
 <p><strong>Requisição HTTP</strong> </p>
@@ -2412,7 +2421,7 @@ O promotor será identificado pelo <code>access_token</code> passado na requisi�
 <td>Id da franquia.</td>
 </tr>
 </tbody></table>
-<h3 id='perfis-franquia-idfranquia'>Perfis/franquia/{idFranquia}</h3>
+<h2 id='perfis-franquia-idfranquia'>Perfis/franquia/{idFranquia}</h2>
 <p>Ao acessar a rota <code>GET Perfis/franquia/{idFranquia}</code> serão listados os id&#39;s dos perfis que estão vinculados a franquia informada.</p>
 
 <p><strong>Requisição HTTP</strong> </p>
@@ -2479,7 +2488,7 @@ O promotor será identificado pelo <code>access_token</code> passado na requisi�
 <td>Id da franquia.</td>
 </tr>
 </tbody></table>
-<h3 id='franquias-mais-proxima'>Franquias/mais-proxima</h3>
+<h2 id='franquias-mais-proxima'>Franquias/mais-proxima</h2>
 <p>Ao acessar a rota <code>GET Franquias/mais-proxima</code> será informado qual a franquia mais próxima do endereço pesquisado.</p>
 
 <p><strong>Requisição HTTP</strong> </p>
