@@ -1266,11 +1266,7 @@ Ao acessar a rota `GET Franquias/mais-proxima` será informado qual a franquia m
 
 **Requisição HTTP** 
 
-`Exemplo: GET /Franquias/mais-proxima?uf=MG&cidade=Ipatinga&bairro=Cidade%20Nobre&cep=35164000&logradouro=Rua%20Osvaldo%20Cruz&numero=10`
-
-<aside class="notice">
-content-type: application/x-www-form-urlencoded
-</aside>
+`Exemplo: GET /Franquias/mais-proxima?cep={cep}&logradouro={logradouro}&numero={numero}&bairro={bairro}&cidade={cidade}&uf={uf}`
 
 > A requisição irá retornar o seguinte JSON:
 
