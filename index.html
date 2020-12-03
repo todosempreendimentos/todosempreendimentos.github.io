@@ -2493,11 +2493,7 @@ O promotor será identificado pelo <code>access_token</code> passado na requisi�
 
 <p><strong>Requisição HTTP</strong> </p>
 
-<p><code>Exemplo: GET /Franquias/mais-proxima?uf=MG&amp;cidade=Ipatinga&amp;bairro=Cidade%20Nobre&amp;cep=35164000&amp;logradouro=Rua%20Osvaldo%20Cruz&amp;numero=10</code></p>
-
-<aside class="notice">
-content-type: application/x-www-form-urlencoded
-</aside>
+<p><code>Exemplo: GET /Franquias/mais-proxima?cep={cep}&amp;logradouro={logradouro}&amp;numero={numero}&amp;bairro={bairro}&amp;cidade={cidade}&amp;uf={uf}</code></p>
 
 <blockquote>
 <p>A requisição irá retornar o seguinte JSON:</p>
