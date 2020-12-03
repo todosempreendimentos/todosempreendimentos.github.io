@@ -342,6 +342,20 @@
               </ul>
           </li>
           <li>
+            <a href="#api-franquia" class="toc-h1 toc-link" data-title="API Franquia">API Franquia</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#introducao-4" class="toc-h2 toc-link" data-title="Introdução">Introdução</a>
+                  </li>
+                  <li>
+                    <a href="#autenticacao-3" class="toc-h2 toc-link" data-title="Autenticação">Autenticação</a>
+                  </li>
+                  <li>
+                    <a href="#filiado" class="toc-h2 toc-link" data-title="Filiado">Filiado</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#erros" class="toc-h1 toc-link" data-title="Erros">Erros</a>
               <ul class="toc-list-h2">
                   <li>
@@ -2150,6 +2164,489 @@ Desta forma, será vinculado e executado os dois serviços na forma de pagamento
 <p>O serviço de Mensalidade (1) está vinculado à forma de pagamento Débito Bancário através da chave <code>fp_2</code></p>
 
 <p>e o serviço de adesão (4) está vinculado à forma de pagamento Direto no Cartão através da chave <code>fp_1</code>.</p>
+<h1 id='api-franquia'>API Franquia</h1><h2 id='introducao-4'>Introdução</h2>
+<p>O objetivo desta documentação é orientar o desenvolvedor sobre como integrar com a <strong>API Franquia Cartão de TODOS</strong>, descrevendo as funcionalidades, os métodos a serem utilizados, listando informações a serem enviadas e recebidas, e provendo exemplos.</p>
+
+<p>Nesse manual você encontrará a referência sobre todas as operações disponíveis na API REST Franquia Cartão de TODOS. Estas operações devem ser executadas utilizando seu token específico nos respectivos endpoints dos ambientes:</p>
+
+<table><thead>
+<tr>
+<th>SANDBOX</th>
+<th>PRODUÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>https://homologacao.sistematodos.com.br/api.franquias</td>
+<td>https://franquias.sistematodos.com.br</td>
+</tr>
+</tbody></table>
+<h2 id='autenticacao-3'>Autenticação</h2>
+<blockquote>
+<p>Para autorização, use este código:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight csharp tab-csharp"><code><span class="kt">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestClient</span><span class="p">(</span><span class="s">"https://login.cartaodetodos.com.br/connect/token"</span><span class="p">);</span>
+
+<span class="kt">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RestRequest</span><span class="p">(</span><span class="n">Method</span><span class="p">.</span><span class="n">POST</span><span class="p">);</span>
+
+<span class="n">request</span><span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Content-Type"</span><span class="p">,</span> <span class="s">"application/x-www-form-urlencoded"</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddParameter</span><span class="p">(</span><span class="s">"grant_type"</span><span class="p">,</span> <span class="s">"client_credentials"</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddParameter</span><span class="p">(</span><span class="s">"scope"</span><span class="p">,</span> <span class="s">"franquias:franq franquias:contas {sistema}"</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddParameter</span><span class="p">(</span><span class="s">"client_id"</span><span class="p">,</span> <span class="s">"{SeuClientID}"</span><span class="p">);</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">AddParameter</span><span class="p">(</span><span class="s">"client_secret"</span><span class="p">,</span> <span class="s">"{SeuClientSecret}"</span><span class="p">);</span>
+
+<span class="n">IRestResponse</span> <span class="n">response</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Execute</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">https</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">fs</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">qs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">querystring</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">hostname</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{endpoint da api}</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/sso2/connect/token</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/x-www-form-urlencoded</span><span class="dl">'</span>
+  <span class="p">},</span>
+  <span class="dl">'</span><span class="s1">maxRedirects</span><span class="dl">'</span><span class="p">:</span> <span class="mi">20</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">end</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="p">});</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">postData</span> <span class="o">=</span> <span class="nx">qs</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+  <span class="dl">'</span><span class="s1">client_id</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{SeuClientID}</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">client_secret</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">{SeuClientSecret}</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">grant_type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">client_credentials</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">scope</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">openid franquias:franq {sistema} franquias:contas</span><span class="dl">'</span>
+<span class="p">});</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">postData</span><span class="p">);</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+
+</code></pre></div><div class="highlight"><pre class="highlight py tab-python"><code><span class="kn">import</span> <span class="nn">requests</span><span class="p">;</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span><span class="s">'client_id'</span> <span class="p">:</span> <span class="s">'{client Id}}'</span><span class="p">,</span> <span class="s">'client_secret'</span> <span class="p">:</span> <span class="s">'{client secret}'</span><span class="p">,</span>  <span class="s">'grant_type'</span> <span class="p">:</span> <span class="s">'client_credentials'</span><span class="p">,</span> <span class="s">'scope'</span> <span class="p">:</span> <span class="s">'openid franquias:franq ctn franquias:contas'</span><span class="p">}</span>    
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="s">"{endpoint do SSO}/sso2/connect/token"</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">res</span><span class="p">.</span><span class="n">content</span>
+</code></pre></div>
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"access_token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{SeuAccess_token}"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"expires_in"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"token_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"scope"</span><span class="p">:</span><span class="w"> </span><span class="s2">"franquias:franq franquias:contas"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+</blockquote>
+
+<p>A aplicação solicita um token de acesso enviando suas credenciais, seu <code>client_id</code> e <code>client_secret</code>, para o servidor de autorização. Um exemplo de solicitação POST poderia se parecer com o que se encontra ao lado:</p>
+
+<p>Se as credenciais da aplicação forem verificadas, o servidor de autorização retorna um token de acesso para a aplicação. Agora a aplicação está autorizada a utilizar sua própria conta!</p>
+
+<aside class="notice">
+Você deve substituir {SeuClientID} por seu <code>client_id</code> e {SeuClientSecret} por seu <code>client_secret</code>.
+</aside>
+
+<p>Uma vez obtido o token de acesso, ele poderá ser utilizado para acesso à API, limitado ao escopo informado, até que o token expire ou seja revogado.</p>
+
+<aside class="notice">
+Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
+</aside>
+
+<p>Para consumir a API é necessário informar o <code>access_token</code> no cabeçalho de <strong>todas</strong> as requisições.</p>
+
+<aside class="notice">
+Os escopos devem ser solicitados de acordo com as informações que se deseja
+</aside>
+<h2 id='filiado'>Filiado</h2>
+<p>Veremos abaixo os métodos para consulta na API Franquias, seus parâmetros e rotas.</p>
+
+<aside class="notice">
+Em todas as requisições deve ser informado o <code>Produto</code> para que possamos identificar o sistema que está sendo requisitado a pesquisa. Caso este não seja informado, tentaremos identificar pelo scope. Caso nenhum dos anteriores sejam identificados, será adotado como default o CTN.
+</aside>
+
+<table><thead>
+<tr>
+<th>SISTEMA</th>
+<th>CÓDIGO</th>
+<th>IDENTIFICAÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>CTN</code></td>
+<td>1</td>
+<td>Sistema do Cartão de TODOS</td>
+</tr>
+<tr>
+<td><code>CVF</code></td>
+<td>2</td>
+<td>Sistema do Clube de Vantagens da Família</td>
+</tr>
+</tbody></table>
+<h3 id='franquias-promotor'>Franquias/promotor</h3>
+<p><strong>Requisição HTTP</strong> </p>
+
+<p>Ao acessar a rota <code>GET /v2/Franquias/promotor</code> será listado o id da franquia a qual o promotor pertence.</p>
+
+<aside class="notice">
+O promotor será identificado pelo <code>access_token</code> passado na requisição.
+</aside>
+
+<p><code>GET /v2/Franquias/promotor</code></p>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p><strong>Retorno</strong></p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Sucesso da requisição.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>-</td>
+<td>Mensagem de retorno.</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id da franquia a qual o promotor pertence.</td>
+</tr>
+</tbody></table>
+<h3 id='perfis'>Perfis</h3>
+<p>Ao acessar a rota <code>GET /v2/Perfis</code> será listado o perfil em todas as franquias que está vinculado.</p>
+
+<p><strong>Requisição HTTP</strong> </p>
+
+<p><code>GET /v2/Perfis</code></p>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"idFranquia"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p><strong>Retorno</strong></p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Sucesso da requisição.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>-</td>
+<td>Mensagem de retorno.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id do perfil.</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>String</td>
+<td>-</td>
+<td>Nome do perfil</td>
+</tr>
+<tr>
+<td><code>idFranquia</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id da franquia.</td>
+</tr>
+</tbody></table>
+<h3 id='perfis-franquia-idfranquia'>Perfis/franquia/{idFranquia}</h3>
+<p>Ao acessar a rota <code>GET Perfis/franquia/{idFranquia}</code> serão listados os id&#39;s dos perfis que estão vinculados a franquia informada.</p>
+
+<p><strong>Requisição HTTP</strong> </p>
+
+<p><code>GET Perfis/franquia/{idFranquia}</code></p>
+
+<p><code>Exemplo: GET Perfis/franquia/46</code></p>
+
+<p><strong>•   idFranquia:</strong> Id da franquia que deseja realizar a pesquisa. </p>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"idFranquia"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p><strong>Retorno</strong></p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Sucesso da requisição.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>-</td>
+<td>Mensagem de retorno.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id do perfil.</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>String</td>
+<td>-</td>
+<td>Nome do perfil.</td>
+</tr>
+<tr>
+<td><code>idFranquia</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id da franquia.</td>
+</tr>
+</tbody></table>
+<h3 id='franquias-mais-proxima'>Franquias/mais-proxima</h3>
+<p>Ao acessar a rota <code>GET Franquias/mais-proxima</code> será informado qual a franquia mais próxima do endereço pesquisado.</p>
+
+<p><strong>Requisição HTTP</strong> </p>
+
+<p><code>Exemplo: GET /Franquias/mais-proxima?uf=MG&amp;cidade=Ipatinga&amp;bairro=Cidade%20Nobre&amp;cep=35164000&amp;logradouro=Rua%20Osvaldo%20Cruz&amp;numero=10</code></p>
+
+<aside class="notice">
+content-type: application/x-www-form-urlencoded
+</aside>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"idRegional"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"unidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"cnpj"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"ativo"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"permiteGerarCobranca"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"telefone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"uf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"cidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"bairro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"cep"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"endereco"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"complemento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"permiteFiliar"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"distanciaKM"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p><strong>Retorno</strong></p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>id</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Id da franquia.</td>
+</tr>
+<tr>
+<td><code>idRegional</code></td>
+<td>String</td>
+<td>-</td>
+<td>Id da regional da franquia.</td>
+</tr>
+<tr>
+<td><code>unidade</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Unidade da franquia.</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>String</td>
+<td>-</td>
+<td>Nome da franquia.</td>
+</tr>
+<tr>
+<td><code>cnpj</code></td>
+<td>Int</td>
+<td>-</td>
+<td>CNPJ da franquia.</td>
+</tr>
+<tr>
+<td><code>ativo</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Status da franquia. (Ativa ou Inativa)</td>
+</tr>
+<tr>
+<td><code>permiteGerarCobranca</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Se a franquia está permitida a gerar cobrança para seus clientes ou não.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Email da franquia.</td>
+</tr>
+<tr>
+<td><code>telefone</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Telefone da franquia.</td>
+</tr>
+<tr>
+<td><code>uf</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Estado da franquia.</td>
+</tr>
+<tr>
+<td><code>cidade</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Cidade da franquia.</td>
+</tr>
+<tr>
+<td><code>bairro</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Bairro da franquia.</td>
+</tr>
+<tr>
+<td><code>cep</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Cep da franquia.</td>
+</tr>
+<tr>
+<td><code>endereco</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Endereço da franquia.</td>
+</tr>
+<tr>
+<td><code>numero</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Número da franquia.</td>
+</tr>
+<tr>
+<td><code>complemento</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Complemento da franquia.</td>
+</tr>
+<tr>
+<td><code>latitude</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Latitude do endereço da franquia.</td>
+</tr>
+<tr>
+<td><code>longitude</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Longitude do endereço da franquia.</td>
+</tr>
+<tr>
+<td><code>permiteFiliar</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id da franquia.</td>
+</tr>
+<tr>
+<td><code>distanciaKM</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Distancia entre a franquia e o endereço do cliente.</td>
+</tr>
+</tbody></table>
 <h1 id='erros'>Erros</h1>
 <p>Nossas API&#39;s utilizam os seguintes códigos de erro:</p>
 <h3 id='erros-2'>Erros</h3>
