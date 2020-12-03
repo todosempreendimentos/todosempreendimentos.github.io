@@ -1029,3 +1029,299 @@ No segundo exemplo, será feita uma filiação onde o serviço de Adesão (4) se
 O serviço de Mensalidade (1) está vinculado à forma de pagamento Débito Bancário através da chave `fp_2`
  
 e o serviço de adesão (4) está vinculado à forma de pagamento Direto no Cartão através da chave `fp_1`.
+
+# API Franquia
+
+## Introdução
+
+O objetivo desta documentação é orientar o desenvolvedor sobre como integrar com a **API Franquia Cartão de TODOS**, descrevendo as funcionalidades, os métodos a serem utilizados, listando informações a serem enviadas e recebidas, e provendo exemplos.
+
+Nesse manual você encontrará a referência sobre todas as operações disponíveis na API REST Franquia Cartão de TODOS. Estas operações devem ser executadas utilizando seu token específico nos respectivos endpoints dos ambientes:
+
+SANDBOX | PRODUÇÃO
+------------ | -------------
+https://homologacao.sistematodos.com.br/api.franquias | https://franquias.sistematodos.com.br
+
+## Autenticação
+
+> Para autorização, use este código:
+
+```csharp
+var client = new RestClient("https://login.cartaodetodos.com.br/connect/token");
+
+var request = new RestRequest(Method.POST);
+
+request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+request.AddParameter("grant_type", "client_credentials");
+request.AddParameter("scope", "franquias:franq franquias:contas {sistema}");
+request.AddParameter("client_id", "{SeuClientID}");
+request.AddParameter("client_secret", "{SeuClientSecret}");
+
+IRestResponse response = client.Execute(request);
+
+```
+
+```javascript
+var http = require('https');
+
+var fs = require('fs');
+
+var qs = require('querystring');
+
+var options = {
+  'method': 'POST',
+  'hostname': '{endpoint da api}',
+  'path': '/sso2/connect/token',
+  'headers': {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  'maxRedirects': 20
+};
+
+var req = http.request(options, function (res) {
+  var chunks = [];
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+  res.on("end", function (chunk) {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+  res.on("error", function (error) {
+    console.error(error);
+  });
+});
+
+var postData = qs.stringify({
+  'client_id': '{SeuClientID}',
+  'client_secret': '{SeuClientSecret}',
+  'grant_type': 'client_credentials',
+  'scope': 'openid franquias:franq {sistema} franquias:contas'
+});
+
+req.write(postData);
+req.end();
+
+```
+
+```py
+import requests;
+
+payload = {'client_id' : '{client Id}}', 'client_secret' : '{client secret}',  'grant_type' : 'client_credentials', 'scope' : 'openid franquias:franq ctn franquias:contas'}    
+
+res = requests.post("{endpoint do SSO}/sso2/connect/token")
+print res.content
+```
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "access_token": "{SeuAccess_token}",
+  "expires_in": 3600,
+  "token_type": "Bearer",
+  "scope": "franquias:franq franquias:contas"
+}
+```
+
+>
+
+A aplicação solicita um token de acesso enviando suas credenciais, seu <code>client_id</code> e <code>client_secret</code>, para o servidor de autorização. Um exemplo de solicitação POST poderia se parecer com o que se encontra ao lado:
+
+Se as credenciais da aplicação forem verificadas, o servidor de autorização retorna um token de acesso para a aplicação. Agora a aplicação está autorizada a utilizar sua própria conta!
+
+<aside class="notice">
+Você deve substituir {SeuClientID} por seu <code>client_id</code> e {SeuClientSecret} por seu <code>client_secret</code>.
+</aside>
+
+Uma vez obtido o token de acesso, ele poderá ser utilizado para acesso à API, limitado ao escopo informado, até que o token expire ou seja revogado.
+
+<aside class="notice">
+Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
+</aside>
+
+Para consumir a API é necessário informar o <code>access_token</code> no cabeçalho de **todas** as requisições.
+
+<aside class="notice">
+Os escopos devem ser solicitados de acordo com as informações que se deseja
+</aside>
+
+## Filiado
+
+Veremos abaixo os métodos para consulta na API Franquias, seus parâmetros e rotas.
+
+<aside class="notice">
+Em todas as requisições deve ser informado o <code>Produto</code> para que possamos identificar o sistema que está sendo requisitado a pesquisa. Caso este não seja informado, tentaremos identificar pelo scope. Caso nenhum dos anteriores sejam identificados, será adotado como default o CTN.
+</aside>
+
+SISTEMA | CÓDIGO | IDENTIFICAÇÃO
+--------- | ----------- | -----------
+`CTN`     | 1    | Sistema do Cartão de TODOS
+`CVF`     | 2    | Sistema do Clube de Vantagens da Família
+
+### Franquias/promotor
+
+**Requisição HTTP** 
+
+Ao acessar a rota `GET /v2/Franquias/promotor` será listado o id da franquia a qual o promotor pertence.
+
+<aside class="notice">
+O promotor será identificado pelo <code>access_token</code> passado na requisição.
+</aside>
+
+`GET /v2/Franquias/promotor`
+
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": 0
+}
+```
+
+**Retorno**
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- |  ----------- | ------ | ---------- 
+`success` | Boolean | - | Sucesso da requisição.
+`message` | String  | - | Mensagem de retorno.
+`data`    | Int     | - | Id da franquia a qual o promotor pertence.
+
+### Perfis
+
+Ao acessar a rota `GET /v2/Perfis` será listado o perfil em todas as franquias que está vinculado.
+
+**Requisição HTTP** 
+
+`GET /v2/Perfis`
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": [
+    {
+      "id": 0,
+      "nome": "string",
+      "idFranquia": 0
+    }
+  ]
+}
+```
+
+**Retorno**
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- |  ----------- | ------ | ---------- 
+`success`     | Boolean | - | Sucesso da requisição.
+`message`     | String  | - | Mensagem de retorno.
+`id`          | Int     | - | Id do perfil.
+`nome`        | String  | - | Nome do perfil
+`idFranquia`  | Int     | - | Id da franquia.
+
+### Perfis/franquia/{idFranquia} 
+
+Ao acessar a rota `GET Perfis/franquia/{idFranquia}` serão listados os id's dos perfis que estão vinculados a franquia informada.
+
+**Requisição HTTP** 
+
+`GET Perfis/franquia/{idFranquia}`
+
+`Exemplo: GET Perfis/franquia/46`
+
+**•	idFranquia:** Id da franquia que deseja realizar a pesquisa. 
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": [
+    {
+      "id": 0,
+      "nome": "string",
+      "idFranquia": 0
+    }
+  ]
+}
+```
+
+**Retorno**
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- |  ----------- | ------ | ---------- 
+`success`     | Boolean | - | Sucesso da requisição.
+`message`     | String  | - | Mensagem de retorno.
+`id`          | Int     | - | Id do perfil.
+`nome`        | String  | - | Nome do perfil.
+`idFranquia`  | Int     | - | Id da franquia.
+
+### Franquias/mais-proxima
+
+Ao acessar a rota `GET Franquias/mais-proxima` será informado qual a franquia mais próxima do endereço pesquisado.
+
+**Requisição HTTP** 
+
+`Exemplo: GET /Franquias/mais-proxima?uf=MG&cidade=Ipatinga&bairro=Cidade%20Nobre&cep=35164000&logradouro=Rua%20Osvaldo%20Cruz&numero=10`
+
+<aside class="notice">
+content-type: application/x-www-form-urlencoded
+</aside>
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "id": 0,
+  "idRegional": 0,
+  "unidade": "string",
+  "nome": "string",
+  "cnpj": "string",
+  "ativo": true,
+  "permiteGerarCobranca": true,
+  "email": "string",
+  "telefone": "string",
+  "uf": "string",
+  "cidade": "string",
+  "bairro": "string",
+  "cep": "string",
+  "endereco": "string",
+  "numero": 0,
+  "complemento": "string",
+  "latitude": 0,
+  "longitude": 0,
+  "permiteFiliar": true,
+  "distanciaKM": 0
+}
+```
+
+**Retorno**
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- |  ----------- | ------ | ---------- 
+`id`                    | Boolean | - | Id da franquia.
+`idRegional`            | String  | - | Id da regional da franquia.
+`unidade`               | Int     | - | Unidade da franquia.
+`nome`                  | String  | - | Nome da franquia.
+`cnpj`                  | Int     | - | CNPJ da franquia.
+`ativo`                 | Int     | - | Status da franquia. (Ativa ou Inativa)
+`permiteGerarCobranca`  | Int     | - | Se a franquia está permitida a gerar cobrança para seus clientes ou não.
+`email`                 | Int     | - | Email da franquia.
+`telefone`              | Int     | - | Telefone da franquia.
+`uf`                    | Int     | - | Estado da franquia.
+`cidade`                | Int     | - | Cidade da franquia.
+`bairro`                | Int     | - | Bairro da franquia.
+`cep`                   | Int     | - | Cep da franquia.
+`endereco`              | Int     | - | Endereço da franquia.
+`numero`                | Int     | - | Número da franquia.
+`complemento`           | Int     | - | Complemento da franquia.
+`latitude`              | Int     | - | Latitude do endereço da franquia.
+`longitude`             | Int     | - | Longitude do endereço da franquia.
+`permiteFiliar`         | Int     | - | Id da franquia.
+`distanciaKM`           | Int     | - | Distancia entre a franquia e o endereço do cliente.
