@@ -326,7 +326,7 @@ IPS de TODOS Colômbia         | 3
 > Para autorização, use este código:
 
 ```csharp
-var client = new RestClient("https://login.cartaodetodos.com.br/connect/token");
+var client = new RestClient("https://minhaconta.sistematodos.com.br/connect/token");
 
 var request = new RestRequest(Method.POST);
 
@@ -1047,7 +1047,7 @@ https://homologacao.sistematodos.com.br/api.franquias | https://franquias.sistem
 > Para autorização, use este código:
 
 ```csharp
-var client = new RestClient("https://login.cartaodetodos.com.br/connect/token");
+var client = new RestClient("https://minhaconta.sistematodos.com.br/connect/token");
 
 var request = new RestRequest(Method.POST);
 
@@ -1146,8 +1146,6 @@ Para consumir a API é necessário informar o <code>access_token</code> no cabe�
 Os escopos devem ser solicitados de acordo com as informações que se deseja
 </aside>
 
-## Filiado
-
 Veremos abaixo os métodos para consulta na API Franquias, seus parâmetros e rotas.
 
 <aside class="notice">
@@ -1159,7 +1157,7 @@ SISTEMA | CÓDIGO | IDENTIFICAÇÃO
 `CTN`     | 1    | Sistema do Cartão de TODOS
 `CVF`     | 2    | Sistema do Clube de Vantagens da Família
 
-### Franquias/promotor
+## Franquias/promotor
 
 **Requisição HTTP** 
 
@@ -1190,7 +1188,7 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `message` | String  | - | Mensagem de retorno.
 `data`    | Int     | - | Id da franquia a qual o promotor pertence.
 
-### Perfis
+## Perfis
 
 Ao acessar a rota `GET /v2/Perfis` será listado o perfil em todas as franquias que está vinculado.
 
@@ -1224,7 +1222,7 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `nome`        | String  | - | Nome do perfil
 `idFranquia`  | Int     | - | Id da franquia.
 
-### Perfis/franquia/{idFranquia} 
+## Perfis/franquia/{idFranquia} 
 
 Ao acessar a rota `GET Perfis/franquia/{idFranquia}` serão listados os id's dos perfis que estão vinculados a franquia informada.
 
@@ -1262,7 +1260,7 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `nome`        | String  | - | Nome do perfil.
 `idFranquia`  | Int     | - | Id da franquia.
 
-### Franquias/mais-proxima
+## Franquias/mais-proxima
 
 Ao acessar a rota `GET Franquias/mais-proxima` será informado qual a franquia mais próxima do endereço pesquisado.
 
