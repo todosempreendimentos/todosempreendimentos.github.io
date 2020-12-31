@@ -640,6 +640,157 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `data`           | String    | - | Identificações dos lançamentos salvos para processamento. 
 
 
+## Pessoa
+
+No aplicativo vendedores é realizado validações de algumas informações do cliente, como por exemplo:
+  <ul>
+    <li>CPF</li>
+    <li>E-mail</li>
+    <li>Telefone</li>
+  </ul>
+
+As principais validações realizadas são:
+
+<b>CPF:</b> Verifica se já existe cadastro em nosso banco de dados.
+
+Abaixo veremos a operação realizada para cada situação:
+<ul>
+  <li><b>Titular ativo:</b> Não será possível prosseguir pois o cliente já possuí uma matrícula ativa.</li>
+  <li><b>Titular desfiliado:</b> Será informado em tela se deseja realizar a refiliação do mesmo.</li>
+  <li><b>Dependente ativo:</b> Pode ser efetuado a filiação</li>
+  <li><b>Dependente inativo:</b> Pode ser efetuado a filiação</li>
+  <li><b>Responsável Financeiro:</b> Pode ser efetuado a filiação</li>
+</ul>
+
+<b>Email:</b> Verifica se o email já se encontra cadastrado no sistema para outro CPF.
+
+<b>Telefone:</b> Verifica se o telefone já se encontra cadastrado no sistema para outro CPF.
+
+### Pessoa/{documento}
+
+**Requisição HTTP** 
+
+Ao acessar a rota `GET Pessoa/{documento}` será realizada a validação do documento de identificação <b>(CPF)</b> informado.
+
+`GET Pessoa/{documento}`
+
+`Exemplo: GET Pessoa/XXXXXXXXXXX`
+
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": {
+    "titularAtivo": true,
+    "idFiliado": 0,
+    "titular": true,
+    "idFranquia": 0,
+    "pessoa": {
+      "nome": "string",
+      "dataNascimento": "2020-12-29T14:34:14.773Z",
+      "documentoIdentificacao": "string",
+      "identidade": "string",
+      "genero": 0,
+      "estadoCivil": 0,
+      "email": "string",
+      "telefones": [
+        {
+          "numero": "string",
+          "tipo": 0
+        }
+      ]
+    }
+  }
+}
+```
+
+**Retorno**
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- |  ----------- | ------ | ---------- 
+`success`                 | Boolean | - | Sucesso da requisição.
+`message`                 | String  | - | Mensagem de retorno.
+`titularAtivo`            | Boolean | - | Retorno do status do filiado (Caso o CPF informado esteja cadastrado no sistema).
+`idfiliado`               | Int     | - | Id do filiado, caso possua cadastro como filiado.
+`titular`                 | Boolean | - | Informação se encontra cadastrado como titular.
+`idFranquia`              | Int     | - | Id da franquia que ele está cadastro, caso esteja cadastrado.
+`nome`                    | String  | - | Nome.
+`dataNascimento`          | Int     | - | Data de nascimento.
+`documentoIdentificacao`  | String  | - | CPF.
+`identidade`              | String  | - | RG.
+`genero`                  | Int     | - | Gênero.
+`estadoCivil`             | Int     | - | Estado civil.
+`email`                   | String  | - | E-mail.
+`numero`                  | String  | - | Numero.
+`tipo`                    | Int     | - | Tipo do número, se é Celular ou Telefone fixo.
+
+### Pessoa/{documento}/{email}
+
+**Requisição HTTP** 
+
+Ao acessar a rota `GET Pessoa/{documento}/{email}` será realizada a validação do email que está sendo cadastrado para <b>(CPF)</b> informado.
+
+`GET Pessoa/{documento}/{email}`
+
+`Exemplo: GET Pessoa/XXXXXXXXXXX/emailexemplo@provedor.com.br`
+
+<aside class="notice">
+Caso o email já esteja cadastrado para outro CPF, não será permitido o prosseguimento do cadastro com esse email.
+</aside>
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": "string"
+}
+```
+
+**Retorno**
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- |  ----------- | ------ | ---------- 
+`success` | Boolean | - | Sucesso da requisição.
+`message` | String  | - | Mensagem de retorno.
+`data`    | String  | - | Informação se o email já se encontra cadastrado.
+
+### Pessoa/{documento}/telefone/{telefone}
+
+**Requisição HTTP** 
+
+Ao acessar a rota `GET Pessoa/{documento}/telefone/{telefone}` será realizada a validação do telefone que está sendo cadastrado para <b>(CPF)</b> informado.
+
+`GET Pessoa/{documento}/telefone/{telefone}`
+
+`Exemplo: GET Pessoa/XXXXXXXXXXX/telefone/31999999999`
+
+<aside class="notice">
+Caso o telefone já esteja cadastrado para outro CPF, não será permitido o prosseguimento do cadastro com esse número.
+</aside>
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "data": "string"
+}
+```
+
+**Retorno**
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- |  ----------- | ------ | ---------- 
+`success` | Boolean | - | Sucesso da requisição.
+`message` | String  | - | Mensagem de retorno.
+`data`    | String  | - | Informação se o telefone já se encontra cadastrado.
+
 ## Filiação
 
 **Requisição HTTP** 
@@ -649,106 +800,78 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 > A requisição irá retornar o seguinte JSON:
 
 ```json
-    "idUsuario": 1,
-    "idPv": "476d4593-ea73-478e-a0e4-7146c58107b4",
-    "idFranquia": 326,
-    "titular": {
-        "nome": "Nome Filiado Alternativo",
-        "dataNascimento": "2001-01-16",
-        "documentoIdentificacao": "66253276549",
-        "email": "MARIAJOSELIVRE10@HOTMAIL.COM",
-        "identidade": "445422445",
-        "estadoCivil": 1,
-        "genero": 1,
-        "telefones": [
-            {
-                "numero": "65998046690",
-                "tipo": 2
-            }
-        ]
-    },
-    "enderecoTitular": {
-        "codigoPostal": "78058178",
-        "logradouro": "Rua Galinha-d'água",
-        "bairro": "Morada da Serra",
-        "cidade": "Cuiabá",
-        "numero": "12",
-        "complemento": "Casa",
-        "uf": "MT"
-    },
-    "responsavelFinanceiroMesmoTitultar": false,
-    "responsavelFinanceiro": {
-        "nome": "Nome Filiado Alternativo",
-        "dataNascimento": "2001-01-16",
-        "documentoIdentificacao": "66253276549",
-        "email": "MARIAJOSELIVRE10@HOTMAIL.COM",
-        "identidade": "445422445",
-        "estadoCivil": 1,
-        "genero": 1,
-        "telefones": [
-            {
-                "numero": "65998046690",
-                "tipo": 2
-            }
-        ]
-    },
-    "enderecoResponsavelFinanceiro": {
-        "codigoPostal": "78058178",
-        "logradouro": "Rua Galinha-d'água",
-        "bairro": "Morada da Serra",
-        "cidade": "Cuiabá",
-        "numero": "12",
-        "complemento": "Casa",
-        "uf": "MT"
-    },
-    "formasPagamento": [
-        {
-            "id": "fp_4234",
-            "idTipoFormaPagamento": energia,
-            "idFormaPagamento": neoEnergia,
-            "dados": {
-                "uc": "asdasd",
-                "pn": "",
-                "contraContrato": ""
-            }
-        },
-        {
-            "id": "cartao",
-            "idTipoFormaPagamento": 3,
-            "idFormaPagamento": null,
-            "dados": {
-                "mes": 12,
-                "ano": 2022,
-                "numero": "4111.1111.1111.1111",
-                "nome": "Gustavo Senci",
-                "bandeira": "visa",
-                "codigoSeguranca": "123",
-                "criptografiaAdyen": null,
-                "metodo": 0,
-                "dadosAutenticacao": {
-                    "cavv": null,
-                    "xid": null,
-                    "eci": null,
-                    "version": null,
-                    "referenceId": null,
-                    "autenticado": false
-                }
-            }
-        }
-    ],
-    "servicos": [
-        {
-            "id": 4,
-            "formaPagamento": "fp_enel"
-        },
-        {
-            "id": 1,
-            "parcelas": 1,
-            "formaPagamento": "diretoCartao"
-        }
-    ],
-    "voucher": "dadasdasd", // opcional
-    "termoAceite": true
+{
+  "idProduto": 0,
+  "idFranquia": 0,
+  "idPv": "string",
+  "idPromotorVendas": 0,
+  "idUsuario": 0,
+  "titular": {
+    "nome": "string",
+    "dataNascimento": "2020-12-28T17:07:55.119Z",
+    "documentoIdentificacao": "string",
+    "identidade": "string",
+    "genero": 0,
+    "estadoCivil": 0,
+    "email": "string",
+    "telefones": [
+      {
+        "numero": "string",
+        "tipo": 0
+      }
+    ]
+  },
+  "enderecoTitular": {
+    "codigoPostal": "string",
+    "logradouro": "string",
+    "numero": "string",
+    "complemento": "string",
+    "bairro": "string",
+    "cidade": "string",
+    "uf": "string"
+  },
+  "responsavelFinanceiro": {
+    "nome": "string",
+    "dataNascimento": "2020-12-28T17:07:55.119Z",
+    "documentoIdentificacao": "string",
+    "identidade": "string",
+    "genero": 0,
+    "estadoCivil": 0,
+    "email": "string",
+    "telefones": [
+      {
+        "numero": "string",
+        "tipo": 0
+      }
+    ]
+  },
+  "responsavelFinanceiroMesmoTitultar": true,
+  "enderecoResponsavelFinanceiro": {
+    "codigoPostal": "string",
+    "logradouro": "string",
+    "numero": "string",
+    "complemento": "string",
+    "bairro": "string",
+    "cidade": "string",
+    "uf": "string"
+  },
+  "formasPagamento": [
+    {
+      "id": "string",
+      "idTipoFormaPagamento": 0,
+      "idFormaPagamento": 0,
+      "dados": []
+    }
+  ],
+  "servicos": [
+    {
+      "id": 0,
+      "parcelas": 0,
+      "formaPagamento": "string"
+    }
+  ],
+  "termoAceite": true,
+  "voucher": "string"
 }
 ```
 
@@ -760,16 +883,18 @@ Os três primeiros dados que teremos no Json são:
 
 PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 --------- | ----------- | ------ | ---------- 
+`idProduto`             | Int    | -  | Identificação do produto.
+`idFranquia`            | String | -  | Identificação da franquia.
+`idPv`                  | Int    | -  | Identificação do Promotor de Vendas.
+`idPromotorVendas`      | Int    | -  | Identificação do Promotor de Vendas.
 `idUsuario`             | Int    | -  | Identificação do usuário.
-`idPv`                  | String | -  | Identificação do Promotor de Vendas.
-`idFranquia`            | Int    | -  | Identificação da franquia
 
 <br>
 
 A tabela a seguir é descritiva ao objeto <code>titular</code> e também <code>responsavelFinanceiro</code>. 
 
 <aside class="notice">
-O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
+O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno <code>false</code> em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
 </aside>
 
 PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
@@ -777,10 +902,10 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `nome`                    | String  | - | Nome do titular do contrato e/ou responsável financeiro.
 `dataNascimento`          | Int     | - | Data de nascimento do titular do contrato e/ou responsável financeiro.
 `documentoIdentificacao`  | String  | - | CPF do titular do contrato e/ou responsável financeiro.
-`email`                   | String  | - | E-mail do titular do contrato e/ou responsável financeiro.
 `identidade`              | String  | - | RG do titular do contrato e/ou responsável financeiro.
-`estadoCivil`             | Int     | - | Estado civil do titular do contrato e/ ou responsável financeiro.
 `genero`                  | Int     | - | Gênero do titular do contrato e/ ou responsável financeiro.
+`estadoCivil`             | Int     | - | Estado civil do titular do contrato e/ ou responsável financeiro.
+`email`                   | String  | - | E-mail do titular do contrato e/ou responsável financeiro.
 `numero`                  | String  | - | Numero do telefone ou celular do titular do contrato e/ ou responsável financeiro.
 `tipo`                    | Int     | - | Tipo do número, se é Celular ou Telefone fixo.
 
@@ -796,10 +921,10 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 --------- | ----------- | ------ | ---------- 
 `codigoPostal`            | String  |    | Código postal do titular do contrato e/ou responsável financeiro.
 `logradouro`              | String  |    | Endereço do titular do contrato e/ou responsável financeiro.
-`bairro`                  | String  |    | Bairro do titular do contrato e/ou responsável financeiro.
-`cidade`                  | String  |    | Cidade do titular do contrato e/ou responsável financeiro.
 `numero`                  | String  |    | Número da casa do titular do contrato e/ou responsável financeiro.
 `complemento`             | String  |    | Complemento do endereço do titular do contrato e/ou responsável financeiro.
+`bairro`                  | String  |    | Bairro do titular do contrato e/ou responsável financeiro.
+`cidade`                  | String  |    | Cidade do titular do contrato e/ou responsável financeiro.
 `uf`                      | String  |    | Estado do titular do contrato e/ou responsável financeiro.
 
 <br>
@@ -833,7 +958,7 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 
 <br>
 
-Abaixo veremos as estruturas de cada forma de pagamento.
+<span id="estru-forma-pgto">Abaixo veremos as estruturas de cada forma de pagamento.</span>
 
 <aside class="notice">
 Para cobranças no Direto no Cartão, Boleto ou Carnê é necessário apenas as informações da estrutura geral.
@@ -1030,6 +1155,169 @@ O serviço de Mensalidade (1) está vinculado à forma de pagamento Débito Banc
  
 e o serviço de adesão (4) está vinculado à forma de pagamento Direto no Cartão através da chave `fp_1`.
 
+## Refiliação
+
+**Requisição HTTP** 
+
+`POST /refiliacao`
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+  {
+    "idProduto": 0,
+    "idFranquia": 0,
+    "idPv": "string",
+    "idPromotorVendas": 0,
+    "idUsuario": 0,
+    "idFiliado": 0,
+    "responsavelFinanceiro": {
+      "nome": "string",
+      "dataNascimento": "2020-12-21T12:03:46.110Z",
+      "documentoIdentificacao": "string",
+      "identidade": "string",
+      "genero": 0,
+      "estadoCivil": 0,
+      "email": "string",
+      "telefones": [
+        {
+          "numero": "string",
+          "tipo": 0
+        }
+      ]
+    },
+    "responsavelFinanceiroMesmoTitultar": true,
+    "enderecoResponsavelFinanceiro": {
+      "codigoPostal": "string",
+      "logradouro": "string",
+      "numero": "string",
+      "complemento": "string",
+      "bairro": "string",
+      "cidade": "string",
+      "uf": "string"
+    },
+    "formasPagamento": [
+      {
+        "id": "string",
+        "idTipoFormaPagamento": 0,
+        "idFormaPagamento": 0,
+        "dados": []
+      }
+    ],
+    "servicos": [
+      {
+        "id": 0,
+        "parcelas": 0,
+        "formaPagamento": "string"
+      }
+    ],
+    "termoAceite": true
+}
+```
+
+### Entrada
+
+As tabelas a seguir são descrições de toda a estrutura Json exibida ao lado.
+
+<aside class="notice">
+Ressaltamos que na fase de refiliação não possuímos o processo de preenchimento dos dados do titular pois, como o mesmo já se encontra cadastrado no sistema, esses dados já existem. Por esse motivo, o retorno não possui nenhum dado do filiado.
+</aside>
+
+Os seis primeiros dados que teremos no Json são:
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`idProduto`             | Int    | -  | Identificação do produto.
+`idFranquia`            | String | -  | Identificação da franquia.
+`idPv`                  | Int    | -  | Identificação do Promotor de Vendas.
+`idPromotorVendas`      | Int    | -  | Identificação do Promotor de Vendas.
+`idUsuario`             | Int    | -  | Identificação do usuário.
+`idFiliado`             | Int    | -  | Identificação do filiado.
+
+<br>
+
+A tabela a seguir é descritiva ao objeto <code>responsavelFinanceiro</code>. 
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`nome`                    | String  | - | Nome do responsável financeiro.
+`dataNascimento`          | Int     | - | Data de nascimento do responsável financeiro.
+`documentoIdentificacao`  | String  | - | CPF do responsável financeiro.
+`identidade`              | String  | - | RG do responsável financeiro.
+`genero`                  | Int     | - | Gênero do responsável financeiro.
+`estadoCivil`             | Int     | - | Estado civil do responsável financeiro.
+`email`                   | String  | - | E-mail do titular do responsável financeiro.
+`numero`                  | String  | - | Numero do telefone ou celular do responsável financeiro.
+`tipo`                    | Int     | - | Tipo do número, se é Celular ou Telefone fixo.
+
+<br>
+
+A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. 
+
+<aside class="notice">
+Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code> e <code>enderecoResponsavelFinanceiro</code>, caso retorne **FALSO**, esses objetos são obrigatórios.
+</aside>
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`responsavelFinanceiroMesmoTitultar`  | Boolean  |    | Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.
+
+<br>
+
+A tabela a seguir é descritiva ao objeto <code>enderecoTitular</code> e <code>enderecoResponsavelFinanceiro</code>.
+
+<aside class="notice">
+O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
+</aside>
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`codigoPostal`            | String  |    | Código postal.
+`logradouro`              | String  |    | Endereço.
+`numero`                  | String  |    | Número da casa.
+`complemento`             | String  |    | Complemento.
+`bairro`                  | String  |    | Bairro.
+`cidade`                  | String  |    | Cidade.
+`uf`                      | String  |    | Estado.
+
+
+<br>
+
+A tabela a seguir é descritiva ao objeto de <code id='forma_pgto_refiliacao'>formasPagamento</code>.
+
+<aside class="notice">
+A estrutura do objeto <code>formasPagamento</code> dependerá da forma de pagamento escolhida pelo cliente.
+</aside>
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`id`                      | String  |    | Identificação da forma de pagamento relacionada com os serviços que serão informados. <a href='#relacionamento'>(Exemplo)</a>
+`idTipoFormaPagamento`    | String  |    | Identificação do idTipoFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.
+`idFormaPagamento`        | String  |    | Identificação do idFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.
+`dados`                   | object  |    | As informações contidade nesse objeto dependerá do retorno da forma de pagamento escolhida pelo cliente.
+
+<br>
+
+As estruturas do retorno das formas de pagamento são as mesmas apresentdas no processo de filiação.<a href='#estru-forma-pgto'>Você pode ver clicando aqui.</a>
+
+<br>
+
+A tabela a seguir é descritiva do objeto <code>servicos</code>.
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`id`              | Int      |    | id será informado de acordo com o serviço escolhido. O mesmo pode ser verificado no <a href='#dicionario-de-dados'>dicionário de dados</a>.
+`parcelas`        | Int      |    | Esse campo só será informado se o id do serviço for correspondente ao serviço de **Adesão**.
+`formaPagamento`  | String   |    | O <code>id</code> informado no objeto <a href='#forma_pgto_refiliacao'><code>formaPagamento</code></a>.
+
+<br>
+
+Por fim teremos os dois ultimos campos do Json
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`termoAceite`  | Boolean  |    | Identificador da confirmação do cliente.
+
 # API Franquia
 
 ## Introdução
@@ -1040,11 +1328,13 @@ Nesse manual você encontrará a referência sobre todas as operações disponí
 
 SANDBOX | PRODUÇÃO
 ------------ | -------------
-https://homologacao.sistematodos.com.br/api.franquias | https://franquias.sistematodos.com.br
+https://homologacao.sistematodos.com.br/api.franquias | https://franquia.sistematodos.com.br
 
 ## Autenticação
 
 > Para autorização, use este código:
+
+
 
 ```csharp
 var client = new RestClient("https://minhaconta.sistematodos.com.br/connect/token");
