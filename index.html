@@ -337,7 +337,13 @@
                     <a href="#arrecadacao-de-lancamentos" class="toc-h2 toc-link" data-title="Arrecadação de Lançamentos">Arrecadação de Lançamentos</a>
                   </li>
                   <li>
+                    <a href="#pessoa" class="toc-h2 toc-link" data-title="Pessoa">Pessoa</a>
+                  </li>
+                  <li>
                     <a href="#filiacao" class="toc-h2 toc-link" data-title="Filiação">Filiação</a>
+                  </li>
+                  <li>
+                    <a href="#refiliacao" class="toc-h2 toc-link" data-title="Refiliação">Refiliação</a>
                   </li>
               </ul>
           </li>
@@ -1469,6 +1475,271 @@ Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
 <td>Identificações dos lançamentos salvos para processamento.</td>
 </tr>
 </tbody></table>
+<h2 id='pessoa'>Pessoa</h2>
+<p>No aplicativo vendedores é realizado validações de algumas informações do cliente, como por exemplo:
+  <ul>
+    <li>CPF</li>
+    <li>E-mail</li>
+    <li>Telefone</li>
+  </ul></p>
+
+<p>As principais validações realizadas são:</p>
+
+<p><b>CPF:</b> Verifica se já existe cadastro em nosso banco de dados.</p>
+
+<p>Abaixo veremos a operação realizada para cada situação:
+<ul>
+  <li><b>Titular ativo:</b> Não será possível prosseguir pois o cliente já possuí uma matrícula ativa.</li>
+  <li><b>Titular desfiliado:</b> Será informado em tela se deseja realizar a refiliação do mesmo.</li>
+  <li><b>Dependente ativo:</b> Pode ser efetuado a filiação</li>
+  <li><b>Dependente inativo:</b> Pode ser efetuado a filiação</li>
+  <li><b>Responsável Financeiro:</b> Pode ser efetuado a filiação</li>
+</ul></p>
+
+<p><b>Email:</b> Verifica se o email já se encontra cadastrado no sistema para outro CPF.</p>
+
+<p><b>Telefone:</b> Verifica se o telefone já se encontra cadastrado no sistema para outro CPF.</p>
+<h3 id='pessoa-documento'>Pessoa/{documento}</h3>
+<p><strong>Requisição HTTP</strong> </p>
+
+<p>Ao acessar a rota <code>GET Pessoa/{documento}</code> será realizada a validação do documento de identificação <b>(CPF)</b> informado.</p>
+
+<p><code>GET Pessoa/{documento}</code></p>
+
+<p><code>Exemplo: GET Pessoa/XXXXXXXXXXX</code></p>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"titularAtivo"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idFiliado"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"titular"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idFranquia"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"pessoa"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"dataNascimento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-29T14:34:14.773Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"documentoIdentificacao"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"identidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"genero"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"estadoCivil"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"telefones"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"tipo"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p><strong>Retorno</strong></p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Sucesso da requisição.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>-</td>
+<td>Mensagem de retorno.</td>
+</tr>
+<tr>
+<td><code>titularAtivo</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Retorno do status do filiado (Caso o CPF informado esteja cadastrado no sistema).</td>
+</tr>
+<tr>
+<td><code>idfiliado</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id do filiado, caso possua cadastro como filiado.</td>
+</tr>
+<tr>
+<td><code>titular</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Informação se encontra cadastrado como titular.</td>
+</tr>
+<tr>
+<td><code>idFranquia</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id da franquia que ele está cadastro, caso esteja cadastrado.</td>
+</tr>
+<tr>
+<td><code>nome</code></td>
+<td>String</td>
+<td>-</td>
+<td>Nome.</td>
+</tr>
+<tr>
+<td><code>dataNascimento</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Data de nascimento.</td>
+</tr>
+<tr>
+<td><code>documentoIdentificacao</code></td>
+<td>String</td>
+<td>-</td>
+<td>CPF.</td>
+</tr>
+<tr>
+<td><code>identidade</code></td>
+<td>String</td>
+<td>-</td>
+<td>RG.</td>
+</tr>
+<tr>
+<td><code>genero</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Gênero.</td>
+</tr>
+<tr>
+<td><code>estadoCivil</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Estado civil.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>String</td>
+<td>-</td>
+<td>E-mail.</td>
+</tr>
+<tr>
+<td><code>numero</code></td>
+<td>String</td>
+<td>-</td>
+<td>Numero.</td>
+</tr>
+<tr>
+<td><code>tipo</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Tipo do número, se é Celular ou Telefone fixo.</td>
+</tr>
+</tbody></table>
+<h3 id='pessoa-documento-email'>Pessoa/{documento}/{email}</h3>
+<p><strong>Requisição HTTP</strong> </p>
+
+<p>Ao acessar a rota <code>GET Pessoa/{documento}/{email}</code> será realizada a validação do email que está sendo cadastrado para <b>(CPF)</b> informado.</p>
+
+<p><code>GET Pessoa/{documento}/{email}</code></p>
+
+<p><code>Exemplo: GET Pessoa/XXXXXXXXXXX/emailexemplo@provedor.com.br</code></p>
+
+<aside class="notice">
+Caso o email já esteja cadastrado para outro CPF, não será permitido o prosseguimento do cadastro com esse email.
+</aside>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p><strong>Retorno</strong></p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Sucesso da requisição.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>-</td>
+<td>Mensagem de retorno.</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>String</td>
+<td>-</td>
+<td>Informação se o email já se encontra cadastrado.</td>
+</tr>
+</tbody></table>
+<h3 id='pessoa-documento-telefone-telefone'>Pessoa/{documento}/telefone/{telefone}</h3>
+<p><strong>Requisição HTTP</strong> </p>
+
+<p>Ao acessar a rota <code>GET Pessoa/{documento}/telefone/{telefone}</code> será realizada a validação do telefone que está sendo cadastrado para <b>(CPF)</b> informado.</p>
+
+<p><code>GET Pessoa/{documento}/telefone/{telefone}</code></p>
+
+<p><code>Exemplo: GET Pessoa/XXXXXXXXXXX/telefone/31999999999</code></p>
+
+<aside class="notice">
+Caso o telefone já esteja cadastrado para outro CPF, não será permitido o prosseguimento do cadastro com esse número.
+</aside>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p><strong>Retorno</strong></p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Sucesso da requisição.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>-</td>
+<td>Mensagem de retorno.</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>String</td>
+<td>-</td>
+<td>Informação se o telefone já se encontra cadastrado.</td>
+</tr>
+</tbody></table>
 <h2 id='filiacao'>Filiação</h2>
 <p><strong>Requisição HTTP</strong> </p>
 
@@ -1477,106 +1748,78 @@ Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
 <blockquote>
 <p>A requisição irá retornar o seguinte JSON:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="w">    </span><span class="nl">"idUsuario"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"idPv"</span><span class="p">:</span><span class="w"> </span><span class="s2">"476d4593-ea73-478e-a0e4-7146c58107b4"</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"idFranquia"</span><span class="p">:</span><span class="w"> </span><span class="mi">326</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"titular"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nome Filiado Alternativo"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"dataNascimento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2001-01-16"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"documentoIdentificacao"</span><span class="p">:</span><span class="w"> </span><span class="s2">"66253276549"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MARIAJOSELIVRE10@HOTMAIL.COM"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"identidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"445422445"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"estadoCivil"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"genero"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"telefones"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"65998046690"</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"tipo"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"enderecoTitular"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"codigoPostal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"78058178"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"logradouro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rua Galinha-d'água"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"bairro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Morada da Serra"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"cidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cuiabá"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"complemento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Casa"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"uf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MT"</span><span class="w">
-    </span><span class="p">}</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"responsavelFinanceiroMesmoTitultar"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"responsavelFinanceiro"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nome Filiado Alternativo"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"dataNascimento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2001-01-16"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"documentoIdentificacao"</span><span class="p">:</span><span class="w"> </span><span class="s2">"66253276549"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MARIAJOSELIVRE10@HOTMAIL.COM"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"identidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"445422445"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"estadoCivil"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"genero"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"telefones"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"65998046690"</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"tipo"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"enderecoResponsavelFinanceiro"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"codigoPostal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"78058178"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"logradouro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rua Galinha-d'água"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"bairro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Morada da Serra"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"cidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cuiabá"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"complemento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Casa"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"uf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MT"</span><span class="w">
-    </span><span class="p">}</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"formasPagamento"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_4234"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"idTipoFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="err">energia</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"idFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="err">neoEnergia</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"dados"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nl">"uc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdasd"</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"pn"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"contraContrato"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cartao"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"idTipoFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"idFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"dados"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nl">"mes"</span><span class="p">:</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"ano"</span><span class="p">:</span><span class="w"> </span><span class="mi">2022</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4111.1111.1111.1111"</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Gustavo Senci"</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"bandeira"</span><span class="p">:</span><span class="w"> </span><span class="s2">"visa"</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"codigoSeguranca"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123"</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"criptografiaAdyen"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"metodo"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"dadosAutenticacao"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                    </span><span class="nl">"cavv"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-                    </span><span class="nl">"xid"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-                    </span><span class="nl">"eci"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-                    </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-                    </span><span class="nl">"referenceId"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-                    </span><span class="nl">"autenticado"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-                </span><span class="p">}</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"servicos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fp_enel"</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"parcelas"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"diretoCartao"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="err">,</span><span class="w">
-    </span><span class="nl">"voucher"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dadasdasd"</span><span class="err">,</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="err">opcional</span><span class="w">
-    </span><span class="nl">"termoAceite"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"idProduto"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"idFranquia"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"idPv"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"idPromotorVendas"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"idUsuario"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"titular"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"dataNascimento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-28T17:07:55.119Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"documentoIdentificacao"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"identidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"genero"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"estadoCivil"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"telefones"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"tipo"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"enderecoTitular"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"codigoPostal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"logradouro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"complemento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"bairro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"cidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"uf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"responsavelFinanceiro"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"dataNascimento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-28T17:07:55.119Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"documentoIdentificacao"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"identidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"genero"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"estadoCivil"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"telefones"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"tipo"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"responsavelFinanceiroMesmoTitultar"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"enderecoResponsavelFinanceiro"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"codigoPostal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"logradouro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"complemento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"bairro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"cidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"uf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"formasPagamento"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"idTipoFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"idFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"dados"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"servicos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"parcelas"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"termoAceite"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"voucher"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='entrada-2'>Entrada</h3>
 <p>As tabelas a seguir são descrições de toda a estrutura Json exibida ao lado.</p>
@@ -1592,22 +1835,34 @@ Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
 </tr>
 </thead><tbody>
 <tr>
-<td><code>idUsuario</code></td>
+<td><code>idProduto</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Identificação do usuário.</td>
+<td>Identificação do produto.</td>
+</tr>
+<tr>
+<td><code>idFranquia</code></td>
+<td>String</td>
+<td>-</td>
+<td>Identificação da franquia.</td>
 </tr>
 <tr>
 <td><code>idPv</code></td>
-<td>String</td>
+<td>Int</td>
 <td>-</td>
 <td>Identificação do Promotor de Vendas.</td>
 </tr>
 <tr>
-<td><code>idFranquia</code></td>
+<td><code>idPromotorVendas</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Identificação da franquia</td>
+<td>Identificação do Promotor de Vendas.</td>
+</tr>
+<tr>
+<td><code>idUsuario</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Identificação do usuário.</td>
 </tr>
 </tbody></table>
 
@@ -1616,7 +1871,7 @@ Na chave {SeuAccess_token} no retorno será apresentado o seu Token.
 <p>A tabela a seguir é descritiva ao objeto <code>titular</code> e também <code>responsavelFinanceiro</code>. </p>
 
 <aside class="notice">
-O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
+O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno <code>false</code> em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
 </aside>
 
 <table><thead>
@@ -1646,16 +1901,16 @@ O objeto <code>responsavelFinanceiro</code> só será preenchido caso o respons�
 <td>CPF do titular do contrato e/ou responsável financeiro.</td>
 </tr>
 <tr>
-<td><code>email</code></td>
-<td>String</td>
-<td>-</td>
-<td>E-mail do titular do contrato e/ou responsável financeiro.</td>
-</tr>
-<tr>
 <td><code>identidade</code></td>
 <td>String</td>
 <td>-</td>
 <td>RG do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>genero</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Gênero do titular do contrato e/ ou responsável financeiro.</td>
 </tr>
 <tr>
 <td><code>estadoCivil</code></td>
@@ -1664,10 +1919,10 @@ O objeto <code>responsavelFinanceiro</code> só será preenchido caso o respons�
 <td>Estado civil do titular do contrato e/ ou responsável financeiro.</td>
 </tr>
 <tr>
-<td><code>genero</code></td>
-<td>Int</td>
+<td><code>email</code></td>
+<td>String</td>
 <td>-</td>
-<td>Gênero do titular do contrato e/ ou responsável financeiro.</td>
+<td>E-mail do titular do contrato e/ou responsável financeiro.</td>
 </tr>
 <tr>
 <td><code>numero</code></td>
@@ -1712,18 +1967,6 @@ O objeto <code>responsavelFinanceiro</code> só será preenchido caso o respons�
 <td>Endereço do titular do contrato e/ou responsável financeiro.</td>
 </tr>
 <tr>
-<td><code>bairro</code></td>
-<td>String</td>
-<td></td>
-<td>Bairro do titular do contrato e/ou responsável financeiro.</td>
-</tr>
-<tr>
-<td><code>cidade</code></td>
-<td>String</td>
-<td></td>
-<td>Cidade do titular do contrato e/ou responsável financeiro.</td>
-</tr>
-<tr>
 <td><code>numero</code></td>
 <td>String</td>
 <td></td>
@@ -1734,6 +1977,18 @@ O objeto <code>responsavelFinanceiro</code> só será preenchido caso o respons�
 <td>String</td>
 <td></td>
 <td>Complemento do endereço do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>bairro</code></td>
+<td>String</td>
+<td></td>
+<td>Bairro do titular do contrato e/ou responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>cidade</code></td>
+<td>String</td>
+<td></td>
+<td>Cidade do titular do contrato e/ou responsável financeiro.</td>
 </tr>
 <tr>
 <td><code>uf</code></td>
@@ -1813,7 +2068,7 @@ A estrutura do objeto <code>formasPagamento</code> dependerá da forma de pagame
 
 <p><br></p>
 
-<p>Abaixo veremos as estruturas de cada forma de pagamento.</p>
+<p><span id="estru-forma-pgto">Abaixo veremos as estruturas de cada forma de pagamento.</span></p>
 
 <aside class="notice">
 Para cobranças no Direto no Cartão, Boleto ou Carnê é necessário apenas as informações da estrutura geral.
@@ -2173,6 +2428,367 @@ Desta forma, será vinculado e executado os dois serviços na forma de pagamento
 <p>O serviço de Mensalidade (1) está vinculado à forma de pagamento Débito Bancário através da chave <code>fp_2</code></p>
 
 <p>e o serviço de adesão (4) está vinculado à forma de pagamento Direto no Cartão através da chave <code>fp_1</code>.</p>
+<h2 id='refiliacao'>Refiliação</h2>
+<p><strong>Requisição HTTP</strong> </p>
+
+<p><code>POST /refiliacao</code></p>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"idProduto"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idFranquia"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idPv"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idPromotorVendas"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idUsuario"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idFiliado"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"responsavelFinanceiro"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"nome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"dataNascimento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-21T12:03:46.110Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"documentoIdentificacao"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"identidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"genero"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"estadoCivil"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"telefones"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"tipo"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"responsavelFinanceiroMesmoTitultar"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"enderecoResponsavelFinanceiro"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"codigoPostal"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"logradouro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"numero"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"complemento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"bairro"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"cidade"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"uf"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"formasPagamento"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"idTipoFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"idFormaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"dados"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"servicos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"parcelas"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"formaPagamento"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"termoAceite"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='entrada-3'>Entrada</h3>
+<p>As tabelas a seguir são descrições de toda a estrutura Json exibida ao lado.</p>
+
+<aside class="notice">
+Ressaltamos que na fase de refiliação não possuímos o processo de preenchimento dos dados do titular pois, como o mesmo já se encontra cadastrado no sistema, esses dados já existem. Por esse motivo, o retorno não possui nenhum dado do filiado.
+</aside>
+
+<p>Os seis primeiros dados que teremos no Json são:</p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>idProduto</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Identificação do produto.</td>
+</tr>
+<tr>
+<td><code>idFranquia</code></td>
+<td>String</td>
+<td>-</td>
+<td>Identificação da franquia.</td>
+</tr>
+<tr>
+<td><code>idPv</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Identificação do Promotor de Vendas.</td>
+</tr>
+<tr>
+<td><code>idPromotorVendas</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Identificação do Promotor de Vendas.</td>
+</tr>
+<tr>
+<td><code>idUsuario</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Identificação do usuário.</td>
+</tr>
+<tr>
+<td><code>idFiliado</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Identificação do filiado.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir é descritiva ao objeto <code>responsavelFinanceiro</code>. </p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>nome</code></td>
+<td>String</td>
+<td>-</td>
+<td>Nome do responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>dataNascimento</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Data de nascimento do responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>documentoIdentificacao</code></td>
+<td>String</td>
+<td>-</td>
+<td>CPF do responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>identidade</code></td>
+<td>String</td>
+<td>-</td>
+<td>RG do responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>genero</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Gênero do responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>estadoCivil</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Estado civil do responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>String</td>
+<td>-</td>
+<td>E-mail do titular do responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>numero</code></td>
+<td>String</td>
+<td>-</td>
+<td>Numero do telefone ou celular do responsável financeiro.</td>
+</tr>
+<tr>
+<td><code>tipo</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Tipo do número, se é Celular ou Telefone fixo.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. </p>
+
+<aside class="notice">
+Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code> e <code>enderecoResponsavelFinanceiro</code>, caso retorne **FALSO**, esses objetos são obrigatórios.
+</aside>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>responsavelFinanceiroMesmoTitultar</code></td>
+<td>Boolean</td>
+<td></td>
+<td>Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir é descritiva ao objeto <code>enderecoTitular</code> e <code>enderecoResponsavelFinanceiro</code>.</p>
+
+<aside class="notice">
+O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
+</aside>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>codigoPostal</code></td>
+<td>String</td>
+<td></td>
+<td>Código postal.</td>
+</tr>
+<tr>
+<td><code>logradouro</code></td>
+<td>String</td>
+<td></td>
+<td>Endereço.</td>
+</tr>
+<tr>
+<td><code>numero</code></td>
+<td>String</td>
+<td></td>
+<td>Número da casa.</td>
+</tr>
+<tr>
+<td><code>complemento</code></td>
+<td>String</td>
+<td></td>
+<td>Complemento.</td>
+</tr>
+<tr>
+<td><code>bairro</code></td>
+<td>String</td>
+<td></td>
+<td>Bairro.</td>
+</tr>
+<tr>
+<td><code>cidade</code></td>
+<td>String</td>
+<td></td>
+<td>Cidade.</td>
+</tr>
+<tr>
+<td><code>uf</code></td>
+<td>String</td>
+<td></td>
+<td>Estado.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir é descritiva ao objeto de <code id='forma_pgto_refiliacao'>formasPagamento</code>.</p>
+
+<aside class="notice">
+A estrutura do objeto <code>formasPagamento</code> dependerá da forma de pagamento escolhida pelo cliente.
+</aside>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>id</code></td>
+<td>String</td>
+<td></td>
+<td>Identificação da forma de pagamento relacionada com os serviços que serão informados. <a href='#relacionamento'>(Exemplo)</a></td>
+</tr>
+<tr>
+<td><code>idTipoFormaPagamento</code></td>
+<td>String</td>
+<td></td>
+<td>Identificação do idTipoFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.</td>
+</tr>
+<tr>
+<td><code>idFormaPagamento</code></td>
+<td>String</td>
+<td></td>
+<td>Identificação do idFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.</td>
+</tr>
+<tr>
+<td><code>dados</code></td>
+<td>object</td>
+<td></td>
+<td>As informações contidade nesse objeto dependerá do retorno da forma de pagamento escolhida pelo cliente.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>As estruturas do retorno das formas de pagamento são as mesmas apresentdas no processo de filiação.<a href='#estru-forma-pgto'>Você pode ver clicando aqui.</a></p>
+
+<p><br></p>
+
+<p>A tabela a seguir é descritiva do objeto <code>servicos</code>.</p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>id</code></td>
+<td>Int</td>
+<td></td>
+<td>id será informado de acordo com o serviço escolhido. O mesmo pode ser verificado no <a href='#dicionario-de-dados'>dicionário de dados</a>.</td>
+</tr>
+<tr>
+<td><code>parcelas</code></td>
+<td>Int</td>
+<td></td>
+<td>Esse campo só será informado se o id do serviço for correspondente ao serviço de <strong>Adesão</strong>.</td>
+</tr>
+<tr>
+<td><code>formaPagamento</code></td>
+<td>String</td>
+<td></td>
+<td>O <code>id</code> informado no objeto <a href='#forma_pgto_refiliacao'><code>formaPagamento</code></a>.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>Por fim teremos os dois ultimos campos do Json</p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>termoAceite</code></td>
+<td>Boolean</td>
+<td></td>
+<td>Identificador da confirmação do cliente.</td>
+</tr>
+</tbody></table>
 <h1 id='api-franquia'>API Franquia</h1><h2 id='introducao-4'>Introdução</h2>
 <p>O objetivo desta documentação é orientar o desenvolvedor sobre como integrar com a <strong>API Franquia Cartão de TODOS</strong>, descrevendo as funcionalidades, os métodos a serem utilizados, listando informações a serem enviadas e recebidas, e provendo exemplos.</p>
 
@@ -2186,7 +2802,7 @@ Desta forma, será vinculado e executado os dois serviços na forma de pagamento
 </thead><tbody>
 <tr>
 <td>https://homologacao.sistematodos.com.br/api.franquias</td>
-<td>https://franquias.sistematodos.com.br</td>
+<td>https://franquia.sistematodos.com.br</td>
 </tr>
 </tbody></table>
 <h2 id='autenticacao-3'>Autenticação</h2>
