@@ -1256,7 +1256,7 @@ Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos 
 
 PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 --------- | ----------- | ------ | ---------- 
-`responsavelFinanceiroMesmoTitultar`  | Boolean  |    | Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.
+`responsavelFinanceiroMesmoTitultar`  | Boolean  |   | Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.
 
 <br>
 
