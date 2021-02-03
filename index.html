@@ -1929,24 +1929,6 @@ O objeto <code>responsavelFinanceiro</code> só será preenchido caso o respons�
 <td>-</td>
 <td>Tipo do número, se é Celular ou Telefone fixo.</td>
 </tr>
-</tbody></table>
-
-<p><br></p>
-
-<p>A tabela a seguir é descritiva ao objeto <code>enderecoTitular</code> e <code>enderecoResponsavelFinanceiro</code>.</p>
-
-<aside class="notice">
-O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
-</aside>
-
-<table><thead>
-<tr>
-<th>PROPRIEDADE</th>
-<th>TIPO</th>
-<th>TAMANHO</th>
-<th>DESCRIÇÃO</th>
-</tr>
-</thead><tbody>
 <tr>
 <td><code>codigoPostal</code></td>
 <td>String</td>
@@ -1996,7 +1978,7 @@ O objeto <code>responsavelFinanceiro</code> só será preenchido caso o respons�
 <p>A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. </p>
 
 <aside class="notice">
-Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code> e <code>enderecoResponsavelFinanceiro</code>, caso retorne **FALSO**, esses objetos são obrigatórios.
+Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento do objeto <code>responsavelFinanceiro</code>, caso retorne **FALSO**, esse objeto é obrigatório.
 </aside>
 
 <table><thead>
@@ -2592,48 +2574,6 @@ Ressaltamos que na fase de refiliação não possuímos o processo de preenchime
 <td>-</td>
 <td>Tipo do número, se é Celular ou Telefone fixo.</td>
 </tr>
-</tbody></table>
-
-<p><br></p>
-
-<p>A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. </p>
-
-<aside class="notice">
-Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code> e <code>enderecoResponsavelFinanceiro</code>, caso retorne **FALSO**, esses objetos são obrigatórios.
-</aside>
-
-<table><thead>
-<tr>
-<th>PROPRIEDADE</th>
-<th>TIPO</th>
-<th>TAMANHO</th>
-<th>DESCRIÇÃO</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>responsavelFinanceiroMesmoTitultar</code></td>
-<td>Boolean</td>
-<td></td>
-<td>Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.</td>
-</tr>
-</tbody></table>
-
-<p><br></p>
-
-<p>A tabela a seguir é descritiva ao objeto <code>enderecoTitular</code> e <code>enderecoResponsavelFinanceiro</code>.</p>
-
-<aside class="notice">
-O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
-</aside>
-
-<table><thead>
-<tr>
-<th>PROPRIEDADE</th>
-<th>TIPO</th>
-<th>TAMANHO</th>
-<th>DESCRIÇÃO</th>
-</tr>
-</thead><tbody>
 <tr>
 <td><code>codigoPostal</code></td>
 <td>String</td>
@@ -2675,6 +2615,30 @@ O objeto <code>responsavelFinanceiro</code> só será preenchido caso o respons�
 <td>String</td>
 <td></td>
 <td>Estado.</td>
+</tr>
+</tbody></table>
+
+<p><br></p>
+
+<p>A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. </p>
+
+<aside class="notice">
+Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code>, caso retorne **FALSO**, esse objeto é obrigatório.
+</aside>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>responsavelFinanceiroMesmoTitultar</code></td>
+<td>Boolean</td>
+<td></td>
+<td>Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.</td>
 </tr>
 </tbody></table>
 
