@@ -906,17 +906,6 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `email`                   | String  | - | E-mail do titular do contrato e/ou responsável financeiro.
 `numero`                  | String  | - | Numero do telefone ou celular do titular do contrato e/ ou responsável financeiro.
 `tipo`                    | Int     | - | Tipo do número, se é Celular ou Telefone fixo.
-
-<br>
-
-A tabela a seguir é descritiva ao objeto <code>enderecoTitular</code> e <code>enderecoResponsavelFinanceiro</code>.
-
-<aside class="notice">
-O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
-</aside>
-
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
 `codigoPostal`            | String  |    | Código postal do titular do contrato e/ou responsável financeiro.
 `logradouro`              | String  |    | Endereço do titular do contrato e/ou responsável financeiro.
 `numero`                  | String  |    | Número da casa do titular do contrato e/ou responsável financeiro.
@@ -930,7 +919,7 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. 
 
 <aside class="notice">
-Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code> e <code>enderecoResponsavelFinanceiro</code>, caso retorne **FALSO**, esses objetos são obrigatórios.
+Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento do objeto <code>responsavelFinanceiro</code>, caso retorne **FALSO**, esse objeto é obrigatório.
 </aside>
 
 PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
@@ -1245,29 +1234,6 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `email`                   | String  | - | E-mail do titular do responsável financeiro.
 `numero`                  | String  | - | Numero do telefone ou celular do responsável financeiro.
 `tipo`                    | Int     | - | Tipo do número, se é Celular ou Telefone fixo.
-
-<br>
-
-A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. 
-
-<aside class="notice">
-Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code> e <code>enderecoResponsavelFinanceiro</code>, caso retorne **FALSO**, esses objetos são obrigatórios.
-</aside>
-
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
-`responsavelFinanceiroMesmoTitultar`  | Boolean  |   | Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.
-
-<br>
-
-A tabela a seguir é descritiva ao objeto <code>enderecoTitular</code> e <code>enderecoResponsavelFinanceiro</code>.
-
-<aside class="notice">
-O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
-</aside>
-
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
 `codigoPostal`            | String  |    | Código postal.
 `logradouro`              | String  |    | Endereço.
 `numero`                  | String  |    | Número da casa.
@@ -1276,6 +1242,17 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `cidade`                  | String  |    | Cidade.
 `uf`                      | String  |    | Estado.
 
+<br>
+
+A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. 
+
+<aside class="notice">
+Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code>, caso retorne **FALSO**, esse objeto é obrigatório.
+</aside>
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`responsavelFinanceiroMesmoTitultar`  | Boolean  |   | Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.
 
 <br>
 
