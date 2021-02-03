@@ -818,16 +818,16 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
         "numero": "string",
         "tipo": 0
       }
-    ]
-  },
-  "enderecoTitular": {
-    "codigoPostal": "string",
-    "logradouro": "string",
-    "numero": "string",
-    "complemento": "string",
-    "bairro": "string",
-    "cidade": "string",
-    "uf": "string"
+    ],
+    "endereco": {
+      "codigoPostal": "string",
+      "logradouro": "string",
+      "numero": "string",
+      "complemento": "string",
+      "bairro": "string",
+      "cidade": "string",
+      "uf": "string"
+    }
   },
   "responsavelFinanceiro": {
     "nome": "string",
@@ -842,24 +842,24 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
         "numero": "string",
         "tipo": 0
       }
-    ]
+    ],
+    "endereco": {
+      "codigoPostal": "string",
+      "logradouro": "string",
+      "numero": "string",
+      "complemento": "string",
+      "bairro": "string",
+      "cidade": "string",
+      "uf": "string"
+    }
   },
   "responsavelFinanceiroMesmoTitultar": true,
-  "enderecoResponsavelFinanceiro": {
-    "codigoPostal": "string",
-    "logradouro": "string",
-    "numero": "string",
-    "complemento": "string",
-    "bairro": "string",
-    "cidade": "string",
-    "uf": "string"
-  },
   "formasPagamento": [
     {
       "id": "string",
       "idTipoFormaPagamento": 0,
       "idFormaPagamento": 0,
-      "dados": []
+      "dados": {}
     }
   ],
   "servicos": [
@@ -1181,24 +1181,24 @@ e o serviço de adesão (4) está vinculado à forma de pagamento Direto no Cart
           "numero": "string",
           "tipo": 0
         }
-      ]
+      ],
+      "endereco": {
+        "codigoPostal": "string",
+        "logradouro": "string",
+        "numero": "string",
+        "complemento": "string",
+        "bairro": "string",
+        "cidade": "string",
+        "uf": "string"
+      }
     },
     "responsavelFinanceiroMesmoTitultar": true,
-    "enderecoResponsavelFinanceiro": {
-      "codigoPostal": "string",
-      "logradouro": "string",
-      "numero": "string",
-      "complemento": "string",
-      "bairro": "string",
-      "cidade": "string",
-      "uf": "string"
-    },
     "formasPagamento": [
       {
         "id": "string",
         "idTipoFormaPagamento": 0,
         "idFormaPagamento": 0,
-        "dados": []
+        "dados": {}
       }
     ],
     "servicos": [
