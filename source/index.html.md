@@ -805,7 +805,6 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
   "idFranquia": 0,
   "idPv": "string",
   "idPromotorVendas": 0,
-  "idUsuario": 0,
   "titular": {
     "nome": "string",
     "dataNascimento": "2020-12-28T17:07:55.119Z",
@@ -887,7 +886,6 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `idFranquia`            | String | -  | Identificação da franquia.
 `idPv`                  | Int    | -  | Identificação do Promotor de Vendas.
 `idPromotorVendas`      | Int    | -  | Identificação do Promotor de Vendas.
-`idUsuario`             | Int    | -  | Identificação do usuário.
 
 <br>
 
@@ -1169,7 +1167,6 @@ e o serviço de adesão (4) está vinculado à forma de pagamento Direto no Cart
     "idFranquia": 0,
     "idPv": "string",
     "idPromotorVendas": 0,
-    "idUsuario": 0,
     "idFiliado": 0,
     "responsavelFinanceiro": {
       "nome": "string",
@@ -1231,7 +1228,6 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `idFranquia`            | String | -  | Identificação da franquia.
 `idPv`                  | Int    | -  | Identificação do Promotor de Vendas.
 `idPromotorVendas`      | Int    | -  | Identificação do Promotor de Vendas.
-`idUsuario`             | Int    | -  | Identificação do usuário.
 `idFiliado`             | Int    | -  | Identificação do filiado.
 
 <br>
