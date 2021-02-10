@@ -1293,10 +1293,10 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 
 ## Voucher
 
-### /Voucher/identificador/{identificador}
+### GET /Voucher/identificador/{identificador}
 
 <aside class="notice">
-A requisição <strong>/Voucher/identificador/{identificador}</strong> retorna apenas as informações referentes ao voucher.
+O endpoint <strong>/Voucher/identificador/{identificador}</strong> deve ser utilizado para obter as informações a respeito do voucher informado de uma forma resumida e assim entender para qual finalidade ele será utilizado, quantos estão disponíveis e também o valor do seu desconto, bem como outras informações complementares.
 </aside>
 
 **Requisição HTTP** 
@@ -1329,22 +1329,22 @@ A tabela a seguir são descrições de toda a estrutura Json exibida ao lado.
 
 PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 --------- | ----------- | ------ | ---------- 
-`success`                 | Boolean | - | Sucesso da requisição.
-`message`                 | String  | - | Mensagem de retorno.
-`requestId`               | Int     | - | Id da requisição.
-`limite`                  | Int    | -  | Limite de utilização do voucher.
-`possuiLimiteDisponivel`  | Int    | -  | Se ainda possui limite para utilização do voucher.
-`porcentagem`             | Int    | -  | Porcentagem de desconto do voucher.
-`valido`                  | Int    | -  | Se é um voucher válido ou não.
-`valorTotal`              | Int    | -  | Valor original sem o voucher.
-`descontoTotal`           | Int    | -  | Desconto do voucher.
-`valorComDescontoTotal`   | Int    | -  | Valor que final aplicado o desconto.
+`success`                 | Boolean | -  | Sucesso da requisição.
+`message`                 | String  | -  | Mensagem de retorno.
+`requestId`               | Int     | -  | Só será retornado em caso de erro.
+`limite`                  | Int     | -  | Quantidade de voucher disponibilizados para a campanha.
+`possuiLimiteDisponivel`  | Int     | -  | Caso a utilização do voucher exceda o seu limite de utilização, esse campo é preenchido com a informação de que o voucher não possui mais limite disponível.
+`porcentagem`             | Int     | -  | Porcentagem de desconto do voucher.
+`valido`                  | Int     | -  | Informação referente a disponibilidade do voucher. Ex.: Se ultrapassar o limite, se estiver ultrapassado a data de validade, se o voucher informado é realmente válido.
+`valorTotal`              | Int     | -  | Valor original do serviço sem o desconto fornecido pelo voucher.
+`descontoTotal`           | Int     | -  | Valor do desconto do voucher.
+`valorComDescontoTotal`   | Int     | -  | Valor total do serviço com o desconto aplicado.
 
 
-### Voucher/servicos/identificador/{identificador}
+### GET Voucher/servicos/identificador/{identificador}
 
 <aside class="notice">
-A requisição <strong>Voucher/servicos/identificador/{identificador}</strong> retorna as informações referentes ao voucher e se o mesmo encontra-se vinculado para o serviço buscado.
+O endpoint <strong>Voucher/servicos/identificador/{identificador}</strong> deve ser utilizado para obter as informações se o voucher informado encontra-se disponível para o serviço que deseja buscar. Também trará as informações resumidas do voucher conforme endpoint anterior.
 </aside>
 
 **Requisição HTTP** 
@@ -1385,21 +1385,21 @@ A tabela a seguir são descrições de toda a estrutura Json exibida ao lado.
 
 PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 --------- | ----------- | ------ | ---------- 
-`success`                 | Boolean | - | Sucesso da requisição.
-`message`                 | String  | - | Mensagem de retorno.
-`requestId`               | Int     | - | Id da requisição.
-`limite`                  | Int    | -  | Limite de utilização do voucher.
-`possuiLimiteDisponivel`  | Int    | -  | Se ainda possui limite para utilização do voucher.
-`porcentagem`             | Int    | -  | Porcentagem de desconto do voucher.
-`id`                      | Int    | -  | Id do serviço.
-`valorMensal`             | Int    | -  | Valor da mensal do serviço.
-`possuiDesconto`          | Int    | -  | Se possui desconto para o serviço.
-`desconto`                | Int    | -  | Qual o valor que será aplicado de desconto.
-`valorComDesconto`        | Int    | -  | Valor total do serviço com o desconto aplicado.
-`valido`                  | Int    | -  | Se é um voucher válido ou não.
-`valorTotal`              | Int    | -  | Valor original sem o voucher.
-`descontoTotal`           | Int    | -  | Desconto do voucher.
-`valorComDescontoTotal`   | Int    | -  | Valor que final aplicado o desconto.
+`success`                 | Boolean | -  | Sucesso da requisição.
+`message`                 | String  | -  | Mensagem de retorno.
+`requestId`               | Int     | -  | Só será retornado em caso de erro.
+`limite`                  | Int     | -  | Quantidade de voucher disponibilizados para a campanha.
+`possuiLimiteDisponivel`  | Int     | -  | Caso a utilização do voucher exceda o seu limite de utilização, esse campo é preenchido com a informação de que o voucher não possui mais limite disponível.
+`porcentagem`             | Int     | -  | Porcentagem de desconto do voucher.
+`id`                      | Int     | -  | Id do serviço.
+`valorMensal`             | Int     | -  | Valor mensal do serviço.
+`possuiDesconto`          | Int     | -  | Se possui desconto para o serviço.
+`desconto`                | Int     | -  | Qual o valor que será aplicado de desconto.
+`valorComDesconto`        | Int     | -  | Valor total do serviço com o desconto aplicado.
+`valido`                  | Int     | -  | Informação referente a disponibilidade do voucher. Ex.: Se ultrapassar o limite, se estiver ultrapassado a data de validade, se o voucher informado é realmente válido.
+`valorTotal`              | Int     | -  | Valor original do serviço sem o desconto fornecido pelo voucher.
+`descontoTotal`           | Int     | -  | Valor do desconto do voucher.
+`valorComDescontoTotal`   | Int     | -  | Valor total do serviço com o desconto aplicado.
 
 # API Franquia
 
