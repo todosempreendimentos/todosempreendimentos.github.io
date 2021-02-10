@@ -2744,7 +2744,7 @@ A estrutura do objeto <code>formasPagamento</code> dependerá da forma de pagame
 </tbody></table>
 <h2 id='voucher'>Voucher</h2><h3 id='get-voucher-identificador-identificador'>GET /Voucher/identificador/{identificador}</h3>
 <aside class="notice">
-O endpoint <strong>/Voucher/identificador/{identificador}</strong> deve ser utilizado para obter as informações a respeito do voucher informado de uma forma resumida e assim entender para qual finalidade ele será utilizado, quantos estão disponíveis e também o valor do seu desconto, bem como outras informações complementares.
+O endpoint <strong>/Voucher/identificador/{identificador}</strong> deve ser utilizado para obter as informações a respeito do voucher informado de uma forma resumida e assim entender qual finalidade ele será utilizado, quantos estão disponíveis e também o valor de desconto, bem como outras informações complementares.
 </aside>
 
 <p><strong>Requisição HTTP</strong> </p>
@@ -2808,7 +2808,7 @@ O endpoint <strong>/Voucher/identificador/{identificador}</strong> deve ser util
 <td><code>possuiLimiteDisponivel</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Caso a utilização do voucher exceda o seu limite de utilização, esse campo é preenchido com a informação de que o voucher não possui mais limite disponível.</td>
+<td>Caso a utilização do voucher exceda o limite de utilização, esse campo é preenchido com a informação de que o voucher não possui limite disponível.</td>
 </tr>
 <tr>
 <td><code>porcentagem</code></td>
@@ -2820,7 +2820,7 @@ O endpoint <strong>/Voucher/identificador/{identificador}</strong> deve ser util
 <td><code>valido</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Informação referente a disponibilidade do voucher. Ex.: Se ultrapassar o limite, se estiver ultrapassado a data de validade, se o voucher informado é realmente válido.</td>
+<td>Informação referente a disponibilidade do voucher. Ex.: Se ultrapassado o limite; se ultrapassado a data de validade; se o voucher informado é realmente válido.</td>
 </tr>
 <tr>
 <td><code>valorTotal</code></td>
@@ -2843,7 +2843,7 @@ O endpoint <strong>/Voucher/identificador/{identificador}</strong> deve ser util
 </tbody></table>
 <h3 id='get-voucher-servicos-identificador-identificador'>GET Voucher/servicos/identificador/{identificador}</h3>
 <aside class="notice">
-O endpoint <strong>Voucher/servicos/identificador/{identificador}</strong> deve ser utilizado para obter as informações se o voucher informado encontra-se disponível para o serviço que deseja buscar. Também trará as informações resumidas do voucher conforme endpoint anterior.
+O endpoint <strong>Voucher/servicos/identificador/{identificador}</strong> deve ser utilizado para obter as informações se o voucher informado encontra-se disponível para o serviço que deseja buscar. Também trará as informações resumidas do voucher bem como endpoint anterior.
 </aside>
 
 <p><strong>Requisição HTTP</strong> </p>
@@ -2915,7 +2915,7 @@ O endpoint <strong>Voucher/servicos/identificador/{identificador}</strong> deve 
 <td><code>possuiLimiteDisponivel</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Caso a utilização do voucher exceda o seu limite de utilização, esse campo é preenchido com a informação de que o voucher não possui mais limite disponível.</td>
+<td>Caso a utilização do voucher exceda o limite de utilização, esse campo é preenchido com a informação de que o voucher não possui limite disponível.</td>
 </tr>
 <tr>
 <td><code>porcentagem</code></td>
@@ -2957,7 +2957,7 @@ O endpoint <strong>Voucher/servicos/identificador/{identificador}</strong> deve 
 <td><code>valido</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Informação referente a disponibilidade do voucher. Ex.: Se ultrapassar o limite, se estiver ultrapassado a data de validade, se o voucher informado é realmente válido.</td>
+<td>Informação referente a disponibilidade do voucher. Ex.: Se ultrapassado o limite; se ultrapassado a data de validade; se o voucher informado é realmente válido.</td>
 </tr>
 <tr>
 <td><code>valorTotal</code></td>
