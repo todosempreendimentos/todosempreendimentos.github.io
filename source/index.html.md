@@ -1296,7 +1296,7 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 ### GET /Voucher/identificador/{identificador}
 
 <aside class="notice">
-O endpoint <strong>/Voucher/identificador/{identificador}</strong> deve ser utilizado para obter as informações a respeito do voucher informado de uma forma resumida e assim entender para qual finalidade ele será utilizado, quantos estão disponíveis e também o valor do seu desconto, bem como outras informações complementares.
+O endpoint <strong>/Voucher/identificador/{identificador}</strong> deve ser utilizado para obter as informações a respeito do voucher informado de uma forma resumida e assim entender qual finalidade ele será utilizado, quantos estão disponíveis e também o valor de desconto, bem como outras informações complementares.
 </aside>
 
 **Requisição HTTP** 
@@ -1333,9 +1333,9 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `message`                 | String  | -  | Mensagem de retorno.
 `requestId`               | Int     | -  | Só será retornado em caso de erro.
 `limite`                  | Int     | -  | Quantidade de voucher disponibilizados para a campanha.
-`possuiLimiteDisponivel`  | Int     | -  | Caso a utilização do voucher exceda o seu limite de utilização, esse campo é preenchido com a informação de que o voucher não possui mais limite disponível.
+`possuiLimiteDisponivel`  | Int     | -  | Caso a utilização do voucher exceda o limite de utilização, esse campo é preenchido com a informação de que o voucher não possui limite disponível.
 `porcentagem`             | Int     | -  | Porcentagem de desconto do voucher.
-`valido`                  | Int     | -  | Informação referente a disponibilidade do voucher. Ex.: Se ultrapassar o limite, se estiver ultrapassado a data de validade, se o voucher informado é realmente válido.
+`valido`                  | Int     | -  | Informação referente a disponibilidade do voucher. Ex.: Se ultrapassado o limite; se ultrapassado a data de validade; se o voucher informado é realmente válido.
 `valorTotal`              | Int     | -  | Valor original do serviço sem o desconto fornecido pelo voucher.
 `descontoTotal`           | Int     | -  | Valor do desconto do voucher.
 `valorComDescontoTotal`   | Int     | -  | Valor total do serviço com o desconto aplicado.
@@ -1344,7 +1344,7 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 ### GET Voucher/servicos/identificador/{identificador}
 
 <aside class="notice">
-O endpoint <strong>Voucher/servicos/identificador/{identificador}</strong> deve ser utilizado para obter as informações se o voucher informado encontra-se disponível para o serviço que deseja buscar. Também trará as informações resumidas do voucher conforme endpoint anterior.
+O endpoint <strong>Voucher/servicos/identificador/{identificador}</strong> deve ser utilizado para obter as informações se o voucher informado encontra-se disponível para o serviço que deseja buscar. Também trará as informações resumidas do voucher bem como endpoint anterior.
 </aside>
 
 **Requisição HTTP** 
@@ -1389,14 +1389,14 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 `message`                 | String  | -  | Mensagem de retorno.
 `requestId`               | Int     | -  | Só será retornado em caso de erro.
 `limite`                  | Int     | -  | Quantidade de voucher disponibilizados para a campanha.
-`possuiLimiteDisponivel`  | Int     | -  | Caso a utilização do voucher exceda o seu limite de utilização, esse campo é preenchido com a informação de que o voucher não possui mais limite disponível.
+`possuiLimiteDisponivel`  | Int     | -  | Caso a utilização do voucher exceda o limite de utilização, esse campo é preenchido com a informação de que o voucher não possui limite disponível.
 `porcentagem`             | Int     | -  | Porcentagem de desconto do voucher.
 `id`                      | Int     | -  | Id do serviço.
 `valorMensal`             | Int     | -  | Valor mensal do serviço.
 `possuiDesconto`          | Int     | -  | Se possui desconto para o serviço.
 `desconto`                | Int     | -  | Qual o valor que será aplicado de desconto.
 `valorComDesconto`        | Int     | -  | Valor total do serviço com o desconto aplicado.
-`valido`                  | Int     | -  | Informação referente a disponibilidade do voucher. Ex.: Se ultrapassar o limite, se estiver ultrapassado a data de validade, se o voucher informado é realmente válido.
+`valido`                  | Int     | -  | Informação referente a disponibilidade do voucher. Ex.: Se ultrapassado o limite; se ultrapassado a data de validade; se o voucher informado é realmente válido.
 `valorTotal`              | Int     | -  | Valor original do serviço sem o desconto fornecido pelo voucher.
 `descontoTotal`           | Int     | -  | Valor do desconto do voucher.
 `valorComDescontoTotal`   | Int     | -  | Valor total do serviço com o desconto aplicado.
