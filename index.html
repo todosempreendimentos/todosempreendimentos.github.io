@@ -345,6 +345,9 @@
                   <li>
                     <a href="#refiliacao" class="toc-h2 toc-link" data-title="Refiliação">Refiliação</a>
                   </li>
+                  <li>
+                    <a href="#voucher" class="toc-h2 toc-link" data-title="Voucher">Voucher</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -2737,6 +2740,242 @@ A estrutura do objeto <code>formasPagamento</code> dependerá da forma de pagame
 <td>Boolean</td>
 <td></td>
 <td>Identificador da confirmação do cliente.</td>
+</tr>
+</tbody></table>
+<h2 id='voucher'>Voucher</h2><h3 id='voucher-identificador-identificador'>/Voucher/identificador/{identificador}</h3>
+<aside class="notice">
+A requisição <strong>/Voucher/identificador/{identificador}</strong> retorna apenas as informações referentes ao voucher.
+</aside>
+
+<p><strong>Requisição HTTP</strong> </p>
+
+<p><code>GET /Voucher/identificador/{identificador}</code></p>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"limite"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"possuiLimiteDisponivel"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"porcentagem"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"servicos"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+    </span><span class="nl">"valido"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"valorTotal"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"descontoTotal"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"valorComDescontoTotal"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='entrada-4'>Entrada</h3>
+<p>A tabela a seguir são descrições de toda a estrutura Json exibida ao lado.</p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Sucesso da requisição.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>-</td>
+<td>Mensagem de retorno.</td>
+</tr>
+<tr>
+<td><code>requestId</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id da requisição.</td>
+</tr>
+<tr>
+<td><code>limite</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Limite de utilização do voucher.</td>
+</tr>
+<tr>
+<td><code>possuiLimiteDisponivel</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Se ainda possui limite para utilização do voucher.</td>
+</tr>
+<tr>
+<td><code>porcentagem</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Porcentagem de desconto do voucher.</td>
+</tr>
+<tr>
+<td><code>valido</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Se é um voucher válido ou não.</td>
+</tr>
+<tr>
+<td><code>valorTotal</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Valor original sem o voucher.</td>
+</tr>
+<tr>
+<td><code>descontoTotal</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Desconto do voucher.</td>
+</tr>
+<tr>
+<td><code>valorComDescontoTotal</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Valor que final aplicado o desconto.</td>
+</tr>
+</tbody></table>
+<h3 id='voucher-servicos-identificador-identificador'>Voucher/servicos/identificador/{identificador}</h3>
+<aside class="notice">
+A requisição <strong>Voucher/servicos/identificador/{identificador}</strong> retorna as informações referentes ao voucher e se o mesmo encontra-se vinculado para o serviço buscado.
+</aside>
+
+<p><strong>Requisição HTTP</strong> </p>
+
+<p><code>GET /Voucher/servicos/identificador/{identificador}</code></p>
+
+<blockquote>
+<p>A requisição irá retornar o seguinte JSON:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"requestId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"limite"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"possuiLimiteDisponivel"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"porcentagem"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"servicos"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"valorMensal"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"possuiDesconto"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"desconto"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"valorComDesconto"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"valido"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"valorTotal"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"descontoTotal"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"valorComDescontoTotal"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='entrada-5'>Entrada</h3>
+<p>A tabela a seguir são descrições de toda a estrutura Json exibida ao lado.</p>
+
+<table><thead>
+<tr>
+<th>PROPRIEDADE</th>
+<th>TIPO</th>
+<th>TAMANHO</th>
+<th>DESCRIÇÃO</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code></td>
+<td>Boolean</td>
+<td>-</td>
+<td>Sucesso da requisição.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td>String</td>
+<td>-</td>
+<td>Mensagem de retorno.</td>
+</tr>
+<tr>
+<td><code>requestId</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id da requisição.</td>
+</tr>
+<tr>
+<td><code>limite</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Limite de utilização do voucher.</td>
+</tr>
+<tr>
+<td><code>possuiLimiteDisponivel</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Se ainda possui limite para utilização do voucher.</td>
+</tr>
+<tr>
+<td><code>porcentagem</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Porcentagem de desconto do voucher.</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Id do serviço.</td>
+</tr>
+<tr>
+<td><code>valorMensal</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Valor da mensal do serviço.</td>
+</tr>
+<tr>
+<td><code>possuiDesconto</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Se possui desconto para o serviço.</td>
+</tr>
+<tr>
+<td><code>desconto</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Qual o valor que será aplicado de desconto.</td>
+</tr>
+<tr>
+<td><code>valorComDesconto</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Valor total do serviço com o desconto aplicado.</td>
+</tr>
+<tr>
+<td><code>valido</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Se é um voucher válido ou não.</td>
+</tr>
+<tr>
+<td><code>valorTotal</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Valor original sem o voucher.</td>
+</tr>
+<tr>
+<td><code>descontoTotal</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Desconto do voucher.</td>
+</tr>
+<tr>
+<td><code>valorComDescontoTotal</code></td>
+<td>Int</td>
+<td>-</td>
+<td>Valor que final aplicado o desconto.</td>
 </tr>
 </tbody></table>
 <h1 id='api-franquia'>API Franquia</h1><h2 id='introducao-4'>Introdução</h2>
