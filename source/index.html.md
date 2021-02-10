@@ -1291,6 +1291,116 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 --------- | ----------- | ------ | ---------- 
 `termoAceite`  | Boolean  |    | Identificador da confirmação do cliente.
 
+## Voucher
+
+### /Voucher/identificador/{identificador}
+
+<aside class="notice">
+A requisição <strong>/Voucher/identificador/{identificador}</strong> retorna apenas as informações referentes ao voucher.
+</aside>
+
+**Requisição HTTP** 
+
+`GET /Voucher/identificador/{identificador}`
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "requestId": "string",
+  "data": {
+    "limite": 0,
+    "possuiLimiteDisponivel": true,
+    "porcentagem": 0,
+    "servicos": [],
+    "valido": true,
+    "valorTotal": 0,
+    "descontoTotal": 0,
+    "valorComDescontoTotal": 0
+  }
+}
+```
+
+### Entrada
+
+A tabela a seguir são descrições de toda a estrutura Json exibida ao lado.
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`success`                 | Boolean | - | Sucesso da requisição.
+`message`                 | String  | - | Mensagem de retorno.
+`requestId`               | Int     | - | Id da requisição.
+`limite`                  | Int    | -  | Limite de utilização do voucher.
+`possuiLimiteDisponivel`  | Int    | -  | Se ainda possui limite para utilização do voucher.
+`porcentagem`             | Int    | -  | Porcentagem de desconto do voucher.
+`valido`                  | Int    | -  | Se é um voucher válido ou não.
+`valorTotal`              | Int    | -  | Valor original sem o voucher.
+`descontoTotal`           | Int    | -  | Desconto do voucher.
+`valorComDescontoTotal`   | Int    | -  | Valor que final aplicado o desconto.
+
+
+### Voucher/servicos/identificador/{identificador}
+
+<aside class="notice">
+A requisição <strong>Voucher/servicos/identificador/{identificador}</strong> retorna as informações referentes ao voucher e se o mesmo encontra-se vinculado para o serviço buscado.
+</aside>
+
+**Requisição HTTP** 
+
+`GET /Voucher/servicos/identificador/{identificador}`
+
+> A requisição irá retornar o seguinte JSON:
+
+```json
+{
+  "success": true,
+  "message": "string",
+  "requestId": "string",
+  "data": {
+    "limite": 0,
+    "possuiLimiteDisponivel": true,
+    "porcentagem": 0,
+    "servicos": [
+      {
+        "id": 0,
+        "valorMensal": 0,
+        "possuiDesconto": true,
+        "desconto": 0,
+        "valorComDesconto": 0
+      }
+    ],
+    "valido": true,
+    "valorTotal": 0,
+    "descontoTotal": 0,
+    "valorComDescontoTotal": 0
+  }
+}
+```
+
+### Entrada
+
+A tabela a seguir são descrições de toda a estrutura Json exibida ao lado.
+
+PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
+--------- | ----------- | ------ | ---------- 
+`success`                 | Boolean | - | Sucesso da requisição.
+`message`                 | String  | - | Mensagem de retorno.
+`requestId`               | Int     | - | Id da requisição.
+`limite`                  | Int    | -  | Limite de utilização do voucher.
+`possuiLimiteDisponivel`  | Int    | -  | Se ainda possui limite para utilização do voucher.
+`porcentagem`             | Int    | -  | Porcentagem de desconto do voucher.
+`id`                      | Int    | -  | Id do serviço.
+`valorMensal`             | Int    | -  | Valor da mensal do serviço.
+`possuiDesconto`          | Int    | -  | Se possui desconto para o serviço.
+`desconto`                | Int    | -  | Qual o valor que será aplicado de desconto.
+`valorComDesconto`        | Int    | -  | Valor total do serviço com o desconto aplicado.
+`valido`                  | Int    | -  | Se é um voucher válido ou não.
+`valorTotal`              | Int    | -  | Valor original sem o voucher.
+`descontoTotal`           | Int    | -  | Desconto do voucher.
+`valorComDescontoTotal`   | Int    | -  | Valor que final aplicado o desconto.
+
 # API Franquia
 
 ## Introdução
