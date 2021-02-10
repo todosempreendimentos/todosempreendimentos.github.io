@@ -2742,9 +2742,9 @@ A estrutura do objeto <code>formasPagamento</code> dependerá da forma de pagame
 <td>Identificador da confirmação do cliente.</td>
 </tr>
 </tbody></table>
-<h2 id='voucher'>Voucher</h2><h3 id='voucher-identificador-identificador'>/Voucher/identificador/{identificador}</h3>
+<h2 id='voucher'>Voucher</h2><h3 id='get-voucher-identificador-identificador'>GET /Voucher/identificador/{identificador}</h3>
 <aside class="notice">
-A requisição <strong>/Voucher/identificador/{identificador}</strong> retorna apenas as informações referentes ao voucher.
+O endpoint <strong>/Voucher/identificador/{identificador}</strong> deve ser utilizado para obter as informações a respeito do voucher informado de uma forma resumida e assim entender para qual finalidade ele será utilizado, quantos estão disponíveis e também o valor do seu desconto, bem como outras informações complementares.
 </aside>
 
 <p><strong>Requisição HTTP</strong> </p>
@@ -2796,19 +2796,19 @@ A requisição <strong>/Voucher/identificador/{identificador}</strong> retorna a
 <td><code>requestId</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Id da requisição.</td>
+<td>Só será retornado em caso de erro.</td>
 </tr>
 <tr>
 <td><code>limite</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Limite de utilização do voucher.</td>
+<td>Quantidade de voucher disponibilizados para a campanha.</td>
 </tr>
 <tr>
 <td><code>possuiLimiteDisponivel</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Se ainda possui limite para utilização do voucher.</td>
+<td>Caso a utilização do voucher exceda o seu limite de utilização, esse campo é preenchido com a informação de que o voucher não possui mais limite disponível.</td>
 </tr>
 <tr>
 <td><code>porcentagem</code></td>
@@ -2820,30 +2820,30 @@ A requisição <strong>/Voucher/identificador/{identificador}</strong> retorna a
 <td><code>valido</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Se é um voucher válido ou não.</td>
+<td>Informação referente a disponibilidade do voucher. Ex.: Se ultrapassar o limite, se estiver ultrapassado a data de validade, se o voucher informado é realmente válido.</td>
 </tr>
 <tr>
 <td><code>valorTotal</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Valor original sem o voucher.</td>
+<td>Valor original do serviço sem o desconto fornecido pelo voucher.</td>
 </tr>
 <tr>
 <td><code>descontoTotal</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Desconto do voucher.</td>
+<td>Valor do desconto do voucher.</td>
 </tr>
 <tr>
 <td><code>valorComDescontoTotal</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Valor que final aplicado o desconto.</td>
+<td>Valor total do serviço com o desconto aplicado.</td>
 </tr>
 </tbody></table>
-<h3 id='voucher-servicos-identificador-identificador'>Voucher/servicos/identificador/{identificador}</h3>
+<h3 id='get-voucher-servicos-identificador-identificador'>GET Voucher/servicos/identificador/{identificador}</h3>
 <aside class="notice">
-A requisição <strong>Voucher/servicos/identificador/{identificador}</strong> retorna as informações referentes ao voucher e se o mesmo encontra-se vinculado para o serviço buscado.
+O endpoint <strong>Voucher/servicos/identificador/{identificador}</strong> deve ser utilizado para obter as informações se o voucher informado encontra-se disponível para o serviço que deseja buscar. Também trará as informações resumidas do voucher conforme endpoint anterior.
 </aside>
 
 <p><strong>Requisição HTTP</strong> </p>
@@ -2903,19 +2903,19 @@ A requisição <strong>Voucher/servicos/identificador/{identificador}</strong> r
 <td><code>requestId</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Id da requisição.</td>
+<td>Só será retornado em caso de erro.</td>
 </tr>
 <tr>
 <td><code>limite</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Limite de utilização do voucher.</td>
+<td>Quantidade de voucher disponibilizados para a campanha.</td>
 </tr>
 <tr>
 <td><code>possuiLimiteDisponivel</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Se ainda possui limite para utilização do voucher.</td>
+<td>Caso a utilização do voucher exceda o seu limite de utilização, esse campo é preenchido com a informação de que o voucher não possui mais limite disponível.</td>
 </tr>
 <tr>
 <td><code>porcentagem</code></td>
@@ -2933,7 +2933,7 @@ A requisição <strong>Voucher/servicos/identificador/{identificador}</strong> r
 <td><code>valorMensal</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Valor da mensal do serviço.</td>
+<td>Valor mensal do serviço.</td>
 </tr>
 <tr>
 <td><code>possuiDesconto</code></td>
@@ -2957,25 +2957,25 @@ A requisição <strong>Voucher/servicos/identificador/{identificador}</strong> r
 <td><code>valido</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Se é um voucher válido ou não.</td>
+<td>Informação referente a disponibilidade do voucher. Ex.: Se ultrapassar o limite, se estiver ultrapassado a data de validade, se o voucher informado é realmente válido.</td>
 </tr>
 <tr>
 <td><code>valorTotal</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Valor original sem o voucher.</td>
+<td>Valor original do serviço sem o desconto fornecido pelo voucher.</td>
 </tr>
 <tr>
 <td><code>descontoTotal</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Desconto do voucher.</td>
+<td>Valor do desconto do voucher.</td>
 </tr>
 <tr>
 <td><code>valorComDescontoTotal</code></td>
 <td>Int</td>
 <td>-</td>
-<td>Valor que final aplicado o desconto.</td>
+<td>Valor total do serviço com o desconto aplicado.</td>
 </tr>
 </tbody></table>
 <h1 id='api-franquia'>API Franquia</h1><h2 id='introducao-4'>Introdução</h2>
