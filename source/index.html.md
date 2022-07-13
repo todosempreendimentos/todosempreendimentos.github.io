@@ -461,6 +461,7 @@ id | FORMA DE PAGAMENTO
 4  | CONCESSIONÁRIA ENERGIA  
 5  | DÉBITO BANCÁRIO  
 7  | DIRETO NO CARTÃO
+9  | CARTÃO DE DÉBITO
 
 <br>
 
@@ -876,83 +877,73 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 
 ### Entrada
 
-As tabelas a seguir são descrições de toda a estrutura Json exibida ao lado.
+O payload de filiação possui os seguintes campos:
 
-Os três primeiros dados que teremos no Json são:
+| Campo                              | Tipo de dados       | Tamanho mínimo | Tamanho máximo | Descrição |
+| ---------------------------------- | ------------------- | -------------- | -------------- | --------- |
+| enderecoResponsavelFinanceiro      | Endereço            |                |                | Endereço do responsável financeiro. |
+| enderecoTitular                    | Endereço            |                |                | Endereço do titular. |
+| formasPagamento                    | Forma Pagamento\[\] |                |                | Listagem de formas de pagamento para os serviços contratados. |
+| idFranquia                         | number              | 1              | 10             | Identificador da franquia. |
+| idProduto                          | number              | 1              | 1              | Identificador do produto. |
+| idPromotorVendas                   | number              | 0              | 10             | Identificador do Promotor de Vendas. |
+| idPv                               | string              | 0              | 36             | Identificador pública do Promotor de Vendas. Formato UUID. |
+| responsavelFinanceiro              | Pessoa              |                |                | Dados pessoais do responsável financeiro. |
+| responsavelFinanceiroMesmoTitultar | boolean             |                |                | Indica se o titular é o responsável financeiro. |
+| servicos                           | Serviço\[\]         |                |                | Listagem de serviços contratados. |
+| termoAceite                        | boolean             |                |                | Indica se o usuário aceito o termo de aceite. |
+| titular                            | Pessoa              |                |                | Dados pessoais do titular da filiação. |
+| voucher                            | string              | 0              | 100            | Voucher de desconto. |
 
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
-`idProduto`             | Int    | -  | Identificação do produto.
-`idFranquia`            | String | -  | Identificação da franquia.
-`idPv`                  | Int    | -  | Identificação do Promotor de Vendas.
-`idPromotorVendas`      | Int    | -  | Identificação do Promotor de Vendas.
+<br>
+<aside class="notice">
+O <code>responsavelFinanceiro</code> só será preenchido caso o <code>responsavelFinanceiroMesmoTitultar</code> seja igual a <code>false</code>.
+</aside>
+
+Campos de objetos do tipo <code>Pessoa</code>.
+
+| Campo                  | Tipo de dados | Tamanho mínimo | Tamanho máximo | Descrição                                               |
+| ---------------------- | ------------- | -------------- | -------------- | ------------------------------------------------------- |
+| contatoNome            | string        | 0              | 150            | Nome completo de uma pessoa para contato de emergência. |
+| contatoTelefone        | string        | 0              | 15             | Telefone de uma pessoa para contato de emergência.      |
+| dataNascimento         | string        | 10             | 19             | Data de nascimento.                                     |
+| documentoIdentificacao | string        | 1              | 11             | CPF.                                                    |
+| email                  | string        | 6              | 60             | Endereço de e-mail.                                     |
+| endereco               | Endereço      |                |                | Endereço residencial.                                   |
+| estadoCivil            | string        | 1              | 1              | Solteiro = 2, Casado = 3, Divorciado = 4, Viuvo = 5     |
+| genero                 | string        | 1              | 1              | 1=Masculino,2=Feminino                                  |
+| idTimeCoracao          | number        | 0              | 10             | Identificador de um time para o qual a pessoa torce.    |
+| identidade             | string        | 1              | 15             | RG.                                                     |
+| nome                   | string        | 1              | 120            | Nome completo.                                          |
+| telefones              | Telefone\[\]  |                |                | Telefones. 
 
 <br>
 
-A tabela a seguir é descritiva ao objeto <code>titular</code> e também <code>responsavelFinanceiro</code>. 
+Campos de objetos do tipo <code>Pessoa</code>.
 
-<aside class="notice">
-O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno <code>false</code> em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
-</aside>
-
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
-`nome`                    | String  | - | Nome do titular do contrato e/ou responsável financeiro.
-`dataNascimento`          | Int     | - | Data de nascimento do titular do contrato e/ou responsável financeiro.
-`documentoIdentificacao`  | String  | - | CPF do titular do contrato e/ou responsável financeiro.
-`identidade`              | String  | - | RG do titular do contrato e/ou responsável financeiro.
-`genero`                  | Int     | - | Gênero do titular do contrato e/ ou responsável financeiro.
-`estadoCivil`             | Int     | - | Estado civil do titular do contrato e/ ou responsável financeiro.
-`email`                   | String  | - | E-mail do titular do contrato e/ou responsável financeiro.
-`numero`                  | String  | - | Numero do telefone ou celular do titular do contrato e/ ou responsável financeiro.
-`tipo`                    | Int     | - | Tipo do número, se é Celular ou Telefone fixo.
+| Campo        | Tipo de dados | Tamanho mínimo | Tamanho máximo | Descrição                                          |
+| ------------ | ------------- | -------------- | -------------- | -------------------------------------------------- |
+| bairro       | string        | 1              | 100            | Nome do bairro.                                    |
+| cidade       | string        | 1              | 50             | Nome da cidade.                                    |
+| codigoPostal | string        | 8              | 8              | CEP.                                               |
+| complemento  | string        | 0              | 200            | Complemento (apartamento, Bloco, etc.)             |
+| logradouro   | string        | 1              | 100            | Logradouro, de acordo com a definição da CORREIOS. |
+| numero       | string        | 1              | 20             | Numero da residência.                              |
+| uf           | string        | 2              | 2              | Sigla da Unidade Federativa.                       |
 
 <br>
 
-A tabela a seguir é descritiva ao objeto <code>enderecoTitular</code> e <code>enderecoResponsavelFinanceiro</code>.
+Campos de objetos do tipo <code id='forma_pgto'>Forma Pagamento</code>.
 
 <aside class="notice">
-O objeto <code>responsavelFinanceiro</code> só será preenchido caso o responsável financeiro esteja com o retorno **falso** em <code>responsavelFinanceiroMesmoTitultar</code>. Caso o contrário, ficará em branco.
+A estrutura do campo <code>formasPagamento</code> dependerá da forma de pagamento escolhida pelo cliente.
 </aside>
 
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
-`codigoPostal`            | String  |    | Código postal do titular do contrato e/ou responsável financeiro.
-`logradouro`              | String  |    | Endereço do titular do contrato e/ou responsável financeiro.
-`numero`                  | String  |    | Número da casa do titular do contrato e/ou responsável financeiro.
-`complemento`             | String  |    | Complemento do endereço do titular do contrato e/ou responsável financeiro.
-`bairro`                  | String  |    | Bairro do titular do contrato e/ou responsável financeiro.
-`cidade`                  | String  |    | Cidade do titular do contrato e/ou responsável financeiro.
-`uf`                      | String  |    | Estado do titular do contrato e/ou responsável financeiro.
-
-<br>
-
-A tabela a seguir contém o identificador chave que retornará se o responsável financeiro será o mesmo que o titular ou não. 
-
-<aside class="notice">
-Caso o mesmo retorne **VERDADEIRO**, não será necessário o preenchimento dos objetos <code>responsavelFinanceiro</code> e <code>enderecoResponsavelFinanceiro</code>, caso retorne **FALSO**, esses objetos são obrigatórios.
-</aside>
-
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
-`responsavelFinanceiroMesmoTitultar`  | Boolean  |    | Identificador se o responsável financeiro é diferente ou igual ao titular do contrato.
-
-<br>
-
-A tabela a seguir é descritiva ao objeto de <code id='forma_pgto'>formasPagamento</code>.
-
-<aside class="notice">
-A estrutura do objeto <code>formasPagamento</code> dependerá da forma de pagamento escolhida pelo cliente.
-</aside>
-
-Abaixo veremos a estrutura geral que será requerida em todas as formas de pagamento e logo depois, as particularidades de cada um.
-
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
-`id`                      | String  |    | Identificação da forma de pagamento relacionada com os serviços que serão informados. <a href='#relacionamento'>(Exemplo)</a>
-`idTipoFormaPagamento`    | String  |    | Identificação do idTipoFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.
-`idFormaPagamento`        | String  |    | Identificação do idFormaPagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.
-`dados`                   | object  |    | As informações contidade nesse objeto dependerá do retorno da forma de pagamento escolhida pelo cliente.
+| Campo                | Tipo de dados               | Tamanho mínimo | Tamanho máximo | Descrição |
+| -------------------- | --------------------------- | -------------- | -------------- | --------- |
+| dados                | Dados da Forma de Pagamento |                |                | Dados para efetivação da cobrança junto ao meio de pagamento escolhido. Varia de acordo com a forma de pagamento. |
+| idFormaPagamento     |                             | 1              | 10             | Identificador da forma de pagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>. |
+| idTipoFormaPagamento | number                      | 1              | 1              | Identificador do tipo da forma de pagamento. Conforme o <a href='#dicionario-de-dados'>dicionário de dados</a>.|
 
 <br>
 
@@ -964,23 +955,38 @@ Para cobranças no Direto no Cartão, Boleto ou Carnê é necessário apenas as 
 
 ### Concessionária de Energia
 
-> Estrutura JSON dos dados da concessionária de energia
+Campos necessários de acordo com as concessionárias de energia suportadas.
+#### CPFL
+| Campo | Tipo de dados | Tamanho mínimo | Tamanho máximo | Descrição                             |
+| ----- | ------------- | -------------- | -------------- | ------------------------------------- |
+| pn    | string        | 10             | 10             | Part Number da Unidade Consumidora.            |
+| uc    | string        | 10             | 10             | Identificação da Unidade Consumidora. |
 
-```json
-{
-   "uc":"00000000000",
-   "contaContrato":"000000000000",
-   "pn":"000000"
-}
-```
+#### ENEL
+| Campo | Tipo de dados | Tamanho mínimo | Tamanho máximo | Descrição                             |
+| ----- | ------------- | -------------- | -------------- | ------------------------------------- |
+| uc    | string        | 9              | 9              | Identificação da Unidade Consumidora. |
 
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
-`uc`                      | String  |    | Número da UC (Unidade consumidora) da conta do cliente.
-`contaContrato`           | String  |    | No grupo NeoEnergia, ao invés da cobrança ser realizada pela instalação/uc é realizada pela conta contrato. **Campo exclusivo da NeoEnergia.**
-`pn`                      | String  |    | Part number/ Numero de peça. **Exclusivo do grupo CPFL.**
+#### ENEL(CELG)
+| Campo | Tipo de dados | Tamanho mínimo | Tamanho máximo | Descrição                             |
+| ----- | ------------- | -------------- | -------------- | ------------------------------------- |
+| uc    | string        | 11             | 11             | Identificação da Unidade Consumidora. |
 
+#### EDP, EletroPaulo, Energisa ou SantaMaria
+| Campo | Tipo de dados | Tamanho mínimo | Tamanho máximo | Descrição                             |
+| ----- | ------------- | -------------- | -------------- | ------------------------------------- |
+| uc    | string        | 10             | 10             | Identificação da Unidade Consumidora. |
 
+#### NeoEnergia
+| Campo         | Tipo de dados | Tamanho mínimo | Tamanho máximo | Descrição                              |
+| ------------- | ------------- | -------------- | -------------- | -------------------------------------- |
+| contaContrato | string        | 12             | 12             | Conta Contrato da Unidade Consumidora. |
+| uc            | string        | 10             | 10             | Identificação da Unidade Consumidora.  |
+
+#### Elektro
+| Campo | Tipo de dados | Tamanho mínimo | Tamanho máximo | Descrição                             |
+| ----- | ------------- | -------------- | -------------- | ------------------------------------- |
+| uc    | string        | 13             | 13             | Identificação da Unidade Consumidora. |
 
 ### Cartão de Crédito
 
@@ -989,40 +995,48 @@ PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
 ```json
    "dados":{
       "mes":1,
-      "ano":2021,
-      "numero":"2222.2222.2222.2222",
+      "ano":2030,
+      "numero":"2222222222222222",
       "nome":"John Doe",
       "bandeira":"master",
-      "codigoSeguranca":"361",
-      "criptografiaAdyen":"",
-      "metodo":0,
-      "dadosAutenticacao":{
-         "cavv":null,
-         "xid":null,
-         "eci":null,
-         "version":null,
-         "referenceId":null,
-         "autenticado":false
-      }
+      "codigoSeguranca":"361"
    }
 ```
 
-PROPRIEDADE | TIPO | TAMANHO | DESCRIÇÃO
---------- | ----------- | ------ | ---------- 
-`mes`                  | Int     |    | Informação do mês da data de válidade do cartão do cliente.
-`ano`                  | Int     |    | Informação do ano da data de válidade do cartão do cliente.
-`numero`               | String  |    | Número do cartão do cliente.
-`nome`                 | String  |    | Nome conforme cartão do cliente.
-`bandeira`             | String  |    | Bandeira do cartão do cliente.
-`codigoSeguranca`      | String  |    | CVC do cartão do cliente.
-`criptografiaAdyen`    | String  |    | 
-`metodo`               | Int     |    | Identificador se o cartão é crédito ou débito. 0 = Cartão crédito / 1 = Cartão de Débito
-`cavv`                 | String  |    | 
-`xid`                  | String  |    |
-`eci`                  | String  |    | 
-`version`              | String  |    | 
-`referenceId`          | String  |    | 
-`autenticado`          | Boolean |    | 
+| Campo           | Tipo de dados | Tamanho mínimo | Tamanho máximo                              | Descrição                                  |
+| --------------- | ------------- | -------------- | ------------------------------------------- | ------------------------------------------ |
+| ano             | number        | 4              | 4                                           | Ano de vencimento do cartão.               |
+| bandeira        | string        | 1              | varia de acordo com as bandeiras suportadas | Bandeira do cartão.                        |
+| codigoSeguranca | string        | 3              | 4                                           | Código de segurança como consta no cartão. |
+| mes             | number        | 1              | 2                                           | Mês de vencimento do cartão.               |
+| nome            | string        | 1              | 22                                          | Nome como consta no cartão.                |
+| numero          | string        | 13             | 19                                          | Numero do cartão.                          |
+
+### Cartão de Débito
+
+> Estrutura JSON dos dados do cartão de crédito
+
+```json
+   "dados":{
+      "mes":1,
+      "ano":2030,
+      "numero":"2222222222222222",
+      "nome":"John Doe",
+      "bandeira":"master",
+      "codigoSeguranca":"361",
+      "metodo":1
+   }
+```
+
+| Campo           | Tipo de dados | Tamanho mínimo | Tamanho máximo                              | Descrição                                  |
+| --------------- | ------------- | -------------- | ------------------------------------------- | ------------------------------------------ |
+| ano             | number        | 4              | 4                                           | Ano de vencimento do cartão.               |
+| bandeira        | string        | 1              | varia de acordo com as bandeiras suportadas | Bandeira do cartão.                        |
+| codigoSeguranca | string        | 3              | 4                                           | Código de segurança como consta no cartão. |
+| mes             | number        | 1              | 2                                           | Mês de vencimento do cartão.               |
+| nome            | string        | 1              | 22                                          | Nome como consta no cartão.                |
+| numero          | string        | 13             | 19                                          | Numero do cartão.                          |
+| metodo          | number        | 1              | 1                                           | Fixo 1                                     |
 
 ### Débito Bancário
 
